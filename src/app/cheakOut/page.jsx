@@ -48,7 +48,7 @@ async function handleReg({ cartId, url, values }) {
     if(sessions){
       route.push(sessions);
     }else{
-      console.log("no found")
+      route.push('/allorders');
     }
   }
   catch{

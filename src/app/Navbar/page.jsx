@@ -15,7 +15,6 @@ import TextField from "@mui/material/TextField";
 import SearchIcon from "@mui/icons-material/Search";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
-import LogoutIcon from "@mui/icons-material/Logout";
 import { useDispatch, useSelector } from "react-redux";
 import { useRouter } from 'next/navigation';
 
@@ -26,7 +25,6 @@ function ResponsiveAppBar() {
   const dispatch = useDispatch();
   const { products: cartProducts } = useSelector((state) => state.cart);
   const router = useRouter();
-
 
   const handleCloseNavMenu = () => {
     setAnchorElNav(null);
@@ -39,17 +37,9 @@ function ResponsiveAppBar() {
   };
 
   return (
-    <AppBar
-      position="static"
-      sx={{
-        backgroundColor: "#fff",
-        boxShadow: "none",
-        borderBottom: "1px solid #ccc",
-      }}
-    >
+    <AppBar position="static" sx={{ backgroundColor: "#fff", boxShadow: "none", borderBottom: "1px solid #ccc" }}>
       <Container maxWidth="xl" sx={{ width: "90%", padding: "15px 0" }}>
         <Toolbar disableGutters>
-          {/* شعار التطبيق */}
           <Typography
             variant="h6"
             noWrap
@@ -58,7 +48,6 @@ function ResponsiveAppBar() {
             sx={{
               fontWeight: 700,
               fontSize: "24px",
-              lineHeight: "24px",
               color: "#000000",
               textDecoration: "none",
               mr: 2,
@@ -68,32 +57,15 @@ function ResponsiveAppBar() {
             Exclusive
           </Typography>
 
-          {/* أيقونة القائمة للشاشات الصغيرة */}
           <Box sx={{ display: { xs: "flex", md: "none" }, mr: 2 }}>
-            <IconButton
-              size="large"
-              aria-label="فتح قائمة التنقل"
-              aria-controls="menu-appbar"
-              aria-haspopup="true"
-              color="inherit"
-            >
+            <IconButton size="large" aria-label="فتح قائمة التنقل" onClick={(e) => setAnchorElNav(e.currentTarget)}>
               <MenuIcon />
             </IconButton>
             <Menu
               id="menu-appbar"
               anchorEl={anchorElNav}
-              anchorOrigin={{
-                vertical: "bottom",
-                horizontal: "left",
-              }}
-              keepMounted
-              transformOrigin={{
-                vertical: "top",
-                horizontal: "left",
-              }}
               open={Boolean(anchorElNav)}
               onClose={handleCloseNavMenu}
-              sx={{ display: { xs: "block", md: "none" } }}
             >
               {pages.map((page) => (
                 <MenuItem
@@ -101,7 +73,6 @@ function ResponsiveAppBar() {
                   onClick={handleCloseNavMenu}
                   component={Link}
                   href={page === "Home" ? "/" : `/${page.toLowerCase()}`}
-                  sx={{ textDecoration: "none", color: "inherit" }}
                 >
                   <Typography textAlign="center">{page}</Typography>
                 </MenuItem>
@@ -109,50 +80,29 @@ function ResponsiveAppBar() {
             </Menu>
           </Box>
 
-          {/* قائمة الصفحات للشاشات الكبيرة */}
-          <Box sx={{ flexGrow: 1, display: { xs: "flex", md: "flex" }, justifyContent: "center" }}>
+          <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" }, justifyContent: "center" }}>
             {pages.map((page) => (
               <Button
                 key={page}
                 onClick={handleCloseNavMenu}
                 component={Link}
                 href={page === "Home" ? "/" : `/${page.toLowerCase()}`}
-                sx={{
-                  fontWeight: 400,
-                  lineHeight: "24px",
-                  color: "#000",
-                  textTransform: "capitalize",
-                  mr: 2,
-                }}
+                sx={{ fontWeight: 400, color: "#000", textTransform: "capitalize", mx: 1 }}
               >
                 {page}
               </Button>
             ))}
           </Box>
 
-          {/* العناصر الجانبية (بحث، مفضلات، عربة التسوق، تسجيل الخروج) */}
           <Box sx={{ display: "flex", alignItems: "center" }}>
-            {/* حقل البحث */}
             <TextField
               variant="outlined"
               size="small"
               placeholder="What are you looking for?"
               sx={{
                 backgroundColor: "#f5f5f5",
-                "& .MuiOutlinedInput-notchedOutline": {
-                  border: "none",
-                },
-                "&:hover .MuiOutlinedInput-notchedOutline": {
-                  border: "none",
-                },
-                "& .MuiInputBase-input": {
-                  color: "#333",
-                },
-                "& .MuiInputBase-input::placeholder": {
-                  fontWeight: 400,
-                  fontSize: "12px",
-                },
-                mr: 2,
+                mr: 1,
+                "& .MuiOutlinedInput-notchedOutline": { border: "none" },
               }}
               InputProps={{
                 endAdornment: (
@@ -162,23 +112,11 @@ function ResponsiveAppBar() {
                 ),
               }}
             />
-            {/* أيقونة المفضلات */}
-            <IconButton
-              sx={{ mr: 1, backgroundColor: "white", borderRadius: "50%" }}
-              component={Link}
-              href="/wishlist"
-            >
+            <IconButton component={Link} href="/wishlist" sx={{ mr: 1 }}>
               <FavoriteIcon />
             </IconButton>
-            {/* أيقونة عربة التسوق */}
             <Link href="/cart" passHref>
-              <IconButton
-                sx={{
-                  backgroundColor: "white",
-                  borderRadius: "50%",
-                  position: "relative",
-                }}
-              >
+              <IconButton sx={{ position: "relative" }}>
                 <ShoppingCartIcon />
                 {cartProducts?.data?.numOfCartItems > 0 && (
                   <Box
