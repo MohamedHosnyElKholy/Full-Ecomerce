@@ -41,10 +41,10 @@ export default function Signup() {
 const didpatch = useDispatch();
 
 const sessions = cheakCart?.data?.session?.url;
-async function handleReg({ cartId, values }) {
+async function handleReg({ cartId, url, values }) {
   try{
     setLoading(true)
-    await didpatch(cheakOut({ cartId, formdData: values })); // استخدم await في حالة أن العملية تأخذ وقت
+    await didpatch(cheakOut({ cartId, url, formdData: values })); // استخدم await في حالة أن العملية تأخذ وقت
     if(sessions){
       route.push(sessions);
     }else{
@@ -64,7 +64,7 @@ const formik = useFormik({
     details: "",
     city: "",
   },
-  onSubmit: (values) => handleReg({ cartId: '6703fddb475ce789cdbcba42', values }),
+  onSubmit: (values) => handleReg({ cartId: '6703fddb475ce789cdbcba42', url: 'http://localhost:3000', values }),
   validationSchema,
 });
 
