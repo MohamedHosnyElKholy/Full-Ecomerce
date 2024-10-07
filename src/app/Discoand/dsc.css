@@ -1,0 +1,8 @@
+.bx {
+    background-image: url("/ecomerce/src/assets/image.jpg"); /* تأكد من أن الصورة موجودة هنا */
+    width: 100%;
+    height: 100vh;
+    background-color: #000;
+    background-size: cover; /* يجعل الصورة تغطي العنصر بالكامل */
+    background-position: center; /* يركز الصورة في المنتصف */
+ }

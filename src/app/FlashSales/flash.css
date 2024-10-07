@@ -1,0 +1,23 @@
+/* styles.css */
+.custom-box {
+    position: relative; /* اجعل العنصر الرئيسي نسبي */
+    display: flex; /* استخدم flexbox */
+    align-items: center; /* قم بمحاذاة العناصر عموديًا */
+    gap: 20px; /* تباعد بين العناصر داخل box */
+    padding-left: 40px;
+}
+
+.custom-box::before {
+    content: '';
+    position: absolute; /* اجعل العنصر الزائف مطلق */
+    width: 1.25rem; /* عرض العنصر الزائف */
+    height: 2.5rem; /* ارتفاع العنصر الزائف */
+    border-radius: 4px; /* زوايا دائرية */
+    background: #DB4444; /* لون الخلفية */
+    left: 0;
+     top: 50%; 
+    transform: translateY(-50%);
+}
+.slick-dots {
+    display: none; /* إخفاء الـ dots الافتراضية */
+  }
