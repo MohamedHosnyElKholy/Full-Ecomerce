@@ -95,10 +95,10 @@ export const clearCart = createAsyncThunk(
 
 export const cheakOut = createAsyncThunk(
   "cheakOut/fetchProducts",
-  async ({cartId,url,formdData}) => {
+  async ({cartId,formdData}) => {
     const token = localStorage.getItem("token");
     const response = await axios.post(
-      `https://ecommerce.routemisr.com/api/v1/orders/checkout-session/${cartId}?url=${url}`,
+      `https://ecommerce.routemisr.com/api/v1/orders/checkout-session/${cartId}`,
       {
         shippingAddress: formdData
       },

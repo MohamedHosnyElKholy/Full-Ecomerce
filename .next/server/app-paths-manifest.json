@@ -1,6 +1,7 @@
 {
-  "/cheakOut/page": "app/cheakOut/page.js",
-  "/allorders/page": "app/allorders/page.js",
   "/page": "app/page.js",
-  "/cart/page": "app/cart/page.js"
+  "/favicon.ico/route": "app/favicon.ico/route.js",
+  "/cart/page": "app/cart/page.js",
+  "/cheakOut/page": "app/cheakOut/page.js",
+  "/allorders/page": "app/allorders/page.js"
 }
