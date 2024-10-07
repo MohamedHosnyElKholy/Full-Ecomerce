@@ -25,7 +25,7 @@ export default function Page() {
   const dispatch = useDispatch();
   const { products: cartProducts } = useSelector((state) => state.cart);
   const allCart = cartProducts?.data?.data?.products || [];
-  console.log(allCart);
+  console.log(cartProducts);
   useEffect(() => {
     dispatch(getuserCart());
   }, [dispatch]);

@@ -15,6 +15,14 @@ import toast from "react-hot-toast";
 
 export default function Page() {
   const [loadingStates, setLoadingStates] = useState({});
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  useEffect(() => {
+    // Check for token on component mount
+    const token = localStorage.getItem("token");
+    if (token) {
+      setIsLoggedIn(true);
+    }
+  }, []);
   const allProduct = useSelector((state) => state.getProductFlashSealsSlice.products);
   const { products: wishlistProducts } = useSelector((state) => state.wishlist);
   const { products: cartProducts } = useSelector((state) => state.cart);
@@ -25,6 +33,10 @@ export default function Page() {
   }, [dispdash]);
 
   function addwishlistproduct(id) {
+    if (!isLoggedIn) {
+      toast.error("You need to log in to add the product to your wishlist.");
+      return; // Stop executing if there's no token
+    }
     try {
       dispdash(addWishList(id));
       toast.success(wishlistProducts?.data?.message);
@@ -34,6 +46,10 @@ export default function Page() {
   }
 
   async function addToCartProduct(id) {
+    if (!isLoggedIn) {
+      toast.error("You need to log in to add the product to your cart.");
+      return; // Stop executing if there's no token
+    }
     try {
       setLoadingStates((prev) => ({ ...prev, [id]: true }));
       await dispdash(addCart(id));

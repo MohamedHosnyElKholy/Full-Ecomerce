@@ -18,6 +18,14 @@ import { addCart } from "../lib/sliceCart";
 import toast from "react-hot-toast";
 
 export default function Page() {
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  useEffect(() => {
+    // Check for token on component mount
+    const token = localStorage.getItem("token");
+    if (token) {
+      setIsLoggedIn(true);
+    }
+  }, []);
   const [loadingStates, setLoadingStates] = useState({});
 
   const allProduct = useSelector((state) => state.getProductFlashSealsSlice.products);
@@ -31,6 +39,10 @@ export default function Page() {
   }, [dispatch]);
 
   function addwishlistproduct(id) {
+    if (!isLoggedIn) {
+      toast.error("You need to log in to add the product to your wishlist.");
+      return; // Stop executing if there's no token
+    }
     try {
       dispatch(addWishList(id));
       toast.success(wishlistProducts?.data?.message);
@@ -40,6 +52,10 @@ export default function Page() {
   }
 
   async function addToCartProduct(id) {
+    if (!isLoggedIn) {
+      toast.error("You need to log in to add the product to your cart.");
+      return; // Stop executing if there's no token
+    }
     try {
       setLoadingStates((prev) => ({ ...prev, [id]: true }));
       await dispatch(addCart(id));

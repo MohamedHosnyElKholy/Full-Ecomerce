@@ -202,13 +202,6 @@ function ResponsiveAppBar() {
                 )}
               </IconButton>
             </Link>
-            {/* أيقونة تسجيل الخروج */}
-            <IconButton
-              sx={{ ml: 1, backgroundColor: "white", borderRadius: "50%" }}
-              onClick={handleLogout}
-            >
-              <LogoutIcon />
-            </IconButton>
           </Box>
         </Toolbar>
       </Container>

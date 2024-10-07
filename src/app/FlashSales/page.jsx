@@ -18,7 +18,7 @@ import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
-import FavoriteIcon from "@mui/icons-material/Favorite"; // أيقونة wishlist
+import FavoriteIcon from "@mui/icons-material/Favorite"; // Wishlist icon
 import "./flash.css";
 import { useDispatch, useSelector } from "react-redux";
 import CircularProgress from "@mui/material/CircularProgress";
@@ -28,6 +28,14 @@ import { addCart } from "../lib/sliceCart";
 import toast from "react-hot-toast";
 
 export default function Page() {
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  useEffect(() => {
+    // Check for token on component mount
+    const token = localStorage.getItem("token");
+    if (token) {
+      setIsLoggedIn(true);
+    }
+  }, []);
   const [loadingStates, setLoadingStates] = useState({});
   const allProduct = useSelector(
     (state) => state.getProductFlashSealsSlice.products
@@ -40,22 +48,30 @@ export default function Page() {
     dispdash(getProductFlashSeals());
   }, [dispdash]);
 
-  function addwishlistproduct(id) {
+  function addWishlistProduct(id) {
+    if (!isLoggedIn) {
+      toast.error("You need to log in to add the product to your wishlist.");
+      return; // Stop executing if there's no token
+    }
     try {
       dispdash(addWishList(id));
-      toast.success(wishlistProducts?.data?.message || "تمت الإضافة إلى المفضلة!");
-    } catch (erorr) {
-      toast.error(erorr?.data?.message || "حدث خطأ أثناء الإضافة.");
+      toast.success(wishlistProducts?.data?.message || "Added to wishlist!");
+    } catch (error) {
+      toast.error(error?.data?.message || "An error occurred while adding.");
     }
   }
 
   async function addToCartProduct(id) {
+    if (!isLoggedIn) {
+      toast.error("You need to log in to add the product to your cart.");
+      return; // Stop executing if there's no token
+    }
     try {
       setLoadingStates((prev) => ({ ...prev, [id]: true }));
       await dispdash(addCart(id));
-      toast.success(cartProducts?.data?.message || "تمت الإضافة إلى السلة!");
-    } catch (erorr) {
-      toast.error(erorr?.data?.message || "حدث خطأ أثناء الإضافة.");
+      toast.success(cartProducts?.data?.message || "Added to cart!");
+    } catch (error) {
+      toast.error(error?.data?.message || "An error occurred while adding.");
     } finally {
       setLoadingStates((prev) => ({ ...prev, [id]: false }));
     }
@@ -65,29 +81,29 @@ export default function Page() {
     dots: false,
     infinite: true,
     speed: 500,
-    slidesToShow: 4, // العدد الافتراضي للشرائح المعروضة
+    slidesToShow: 4, // Default number of slides shown
     slidesToScroll: 1,
     responsive: [
       {
-        breakpoint: 1200, // شاشات كبيرة جدًا
+        breakpoint: 1200, // Very large screens
         settings: {
           slidesToShow: 4,
         },
       },
       {
-        breakpoint: 992, // شاشات متوسطة الحجم (مثل أجهزة الكمبيوتر المكتبية)
+        breakpoint: 992, // Medium-sized screens (like desktops)
         settings: {
           slidesToShow: 3,
         },
       },
       {
-        breakpoint: 768, // الأجهزة اللوحية
+        breakpoint: 768, // Tablets
         settings: {
           slidesToShow: 2,
         },
       },
       {
-        breakpoint: 480, // الهواتف المحمولة
+        breakpoint: 480, // Mobile phones
         settings: {
           slidesToShow: 1,
         },
@@ -115,7 +131,7 @@ export default function Page() {
   }, []);
 
   if (countdownDate === null) {
-    // يمكنك إظهار مؤشر تحميل هنا إذا أردت
+    // You can show a loading indicator here if you want
     return (
       <Box sx={{ display: "flex", justifyContent: "center", mt: 4 }}>
         <CircularProgress />
@@ -131,7 +147,7 @@ export default function Page() {
       <Box
         sx={{
           display: "flex",
-          flexDirection: { xs: "column", md: "row" }, // تغيير الاتجاه للشاشات الصغيرة
+          flexDirection: { xs: "column", md: "row" }, // Change direction for small screens
           gap: { xs: "20px", md: "100px" },
           alignItems: { xs: "flex-start", md: "center" },
           marginTop: "20px",
@@ -157,7 +173,7 @@ export default function Page() {
                   <Box
                     sx={{
                       display: "flex",
-                      gap: "10px", // جعل الفراغ أصغر للشاشات الصغيرة
+                      gap: "10px", // Make the gap smaller for small screens
                       alignItems: "flex-start",
                     }}
                   >
@@ -256,7 +272,7 @@ export default function Page() {
               <Card
                 key={el.id}
                 sx={{
-                  maxWidth: { xs: "100%", md: 345 }, // جعل العرض مرنًا
+                  maxWidth: { xs: "100%", md: 345 }, // Make the width flexible
                   margin: 2,
                   transition: "transform 0.3s",
                   "&:hover": { transform: "scale(1.05)", boxShadow: 3 },
@@ -331,7 +347,7 @@ export default function Page() {
                       <FavoriteIcon
                         onClick={(e) => {
                           e.stopPropagation();
-                          addwishlistproduct(el.id);
+                          addWishlistProduct(el.id);
                         }}
                       />
                     </IconButton>

@@ -41,7 +41,6 @@ export default function Signup() {
 const didpatch = useDispatch();
 
 const sessions = cheakCart?.data?.session?.url;
-
 async function handleReg({ cartId, url, values }) {
   try{
     setLoading(true)
@@ -65,7 +64,7 @@ const formik = useFormik({
     details: "",
     city: "",
   },
-  onSubmit: (values) => handleReg({ cartId: '6701d5baf9d4967782a1ead7', url: 'http://localhost:3000', values }),
+  onSubmit: (values) => handleReg({ cartId: '6703fddb475ce789cdbcba42', url: 'http://localhost:3000', values }),
   validationSchema,
 });
 
