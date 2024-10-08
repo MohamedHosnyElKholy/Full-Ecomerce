@@ -98,7 +98,7 @@ export const cheakOut = createAsyncThunk(
   async ({cartId,formdData}) => {
     const token = localStorage.getItem("token");
     const response = await axios.post(
-      `https://ecommerce.routemisr.com/api/v1/orders/checkout-session/${cartId}`,
+      `https://ecommerce.routemisr.com/api/v1/orders/checkout-session/${cartId}?url=https://full-ecomerce.vercel.app`,
       {
         shippingAddress: formdData
       },

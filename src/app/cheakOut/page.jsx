@@ -46,7 +46,7 @@ async function handleReg({ cartId, values }) {
     setLoading(true)
     await didpatch(cheakOut({ cartId, formdData: values })); // استخدم await في حالة أن العملية تأخذ وقت
     if(sessions){
-      route.push(sessions);
+      // route.push(sessions);
     }else{
       console.log('err')
     }
