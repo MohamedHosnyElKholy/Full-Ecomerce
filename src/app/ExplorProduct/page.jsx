@@ -16,6 +16,7 @@ import { addWishList } from "../lib/sliceWishlist";
 import Tooltip from "@mui/material/Tooltip";
 import { addCart } from "../lib/sliceCart";
 import toast from "react-hot-toast";
+import Image from 'next/image';
 
 export default function Page() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -119,17 +120,17 @@ export default function Page() {
                   href={`/DetialsProduct/${el.id}/${el.category.name}`}
                   style={{ textDecoration: "none", color: "inherit" }}
                 >
-                  <CardMedia
-                    component="img"
-                    height="300px"
-                    width="100%"
-                    image={el.imageCover}
-                    alt={el.name}
-                    sx={{
-                      borderTopLeftRadius: "8px",
-                      borderTopRightRadius: "8px",
-                    }}
-                  />
+                  <Image
+                src={el.imageCover} // رابط الصورة
+                alt={el.name} // وصف الصورة
+                width={200} // استبدل بالقيمة المناسبة
+                height={200} // استبدل بالقيمة المناسبة
+                style={{
+                    borderTopLeftRadius: '8px',
+                    borderTopRightRadius: '8px',
+                    objectFit: 'cover', // للحفاظ على تناسق الصورة
+                }}
+            />
                   <CardContent>
                     <Typography
                       variant="h6"

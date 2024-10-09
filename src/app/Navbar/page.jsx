@@ -106,7 +106,7 @@ function ResponsiveAppBar() {
               }}
               InputProps={{
                 endAdornment: (
-                  <IconButton>
+                  <IconButton component={Link} href="/allProduct">
                     <SearchIcon />
                   </IconButton>
                 ),

@@ -1,11 +1,20 @@
 "use client";
-import React from "react";
+import React, { useEffect } from "react";
 import Container from "@mui/material/Container";
 import { Grid, Typography, Box, TextField, Button } from "@mui/material";
 import PhoneIcon from "@mui/icons-material/Phone";
 import MessageIcon from "@mui/icons-material/Message";
+import { useRouter } from 'next/navigation';
 
 export default function Contact() {
+  const router = useRouter();
+
+  useEffect(() => {
+    const token = localStorage.getItem("token"); 
+    if (!token) {
+      router.push('/login'); 
+    }
+  }, [router]);
   return (
     <Container
       sx={{

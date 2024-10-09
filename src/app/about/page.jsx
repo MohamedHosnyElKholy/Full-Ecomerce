@@ -1,4 +1,5 @@
-import React from "react";
+'use client'
+import React, { useEffect } from "react";
 import Container from "@mui/material/Container";
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
@@ -12,8 +13,17 @@ import imageOne from "../../assets/istockphoto-1214561965-612x612.jpg";
 import imageTwo from "../../assets/bussinesOne.png";
 import imageThree from "../../assets/bussinesTwo.png";
 import imageFour from "../../assets/bussinesThree.png";
+import { useRouter } from 'next/navigation';
 
 export default function About() {
+  const router = useRouter();
+
+  useEffect(() => {
+    const token = localStorage.getItem("token"); 
+    if (!token) {
+      router.push('/login'); 
+    }
+  }, [router]);
   return (
     <Container>
       <Grid container spacing={2} sx={{ marginTop: "25px" }}>

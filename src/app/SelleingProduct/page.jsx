@@ -12,6 +12,7 @@ import { addWishList } from "../lib/sliceWishlist";
 import Tooltip from "@mui/material/Tooltip";
 import { addCart } from "../lib/sliceCart";
 import toast from "react-hot-toast";
+import Image from 'next/image';
 
 export default function Page() {
   const [loadingStates, setLoadingStates] = useState({});
@@ -110,16 +111,17 @@ export default function Page() {
               }}
             >
               <Link href={`/DetialsProduct/${el.id}/${el.category.name}`} style={{ textDecoration: "none" }}>
-                <Avatar
-                  src={el.imageCover}
-                  variant="square"
-                  sx={{
-                    width: "100%",
-                    height: "auto",
-                    borderRadius: "8px",
-                    marginBottom: "15px",
-                  }}
-                />
+              <Image
+                src={el.imageCover} // رابط الصورة
+                alt={el.name} // وصف الصورة
+                width={200} // استبدل بالقيمة المناسبة
+                height={200} // استبدل بالقيمة المناسبة
+                style={{
+                    borderTopLeftRadius: '8px',
+                    borderTopRightRadius: '8px',
+                    objectFit: 'cover', // للحفاظ على تناسق الصورة
+                }}
+            />
                 <Box sx={{ textAlign: "left", marginTop: "15px" }}>
                   <Typography sx={{ fontWeight: "bold", color: "#000", marginBottom: "5px" }}>
                     {el.title}

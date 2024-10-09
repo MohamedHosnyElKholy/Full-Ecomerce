@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, {useEffect, useState } from "react";
 import { addAddress } from "../lib/sliceAdress"; // تأكد من تحديث المسار الصحيح
 import {
   Box,
@@ -15,11 +15,18 @@ import { useDispatch, useSelector } from "react-redux";
 import { useRouter } from 'next/navigation';
 
 export default function AddAddressPage() {
+  const router = useRouter();
+
+  useEffect(() => {
+    const token = localStorage.getItem("token"); 
+    if (!token) {
+      router.push('/login'); 
+    }
+  }, [router]);
   const [name, setName] = useState("");
   const [details, setDetails] = useState("");
   const [phone, setPhone] = useState("");
   const [city, setCity] = useState("");
-  const router = useRouter();
   const { products: addressProducts } = useSelector((state) => state.address);
   const dispatch = useDispatch();
 

@@ -6,6 +6,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import { useDispatch, useSelector } from "react-redux";
 import { getWishLits, deleteWishList } from "../lib/sliceWishlist";
 import toast from 'react-hot-toast';
+import Image from 'next/image';
 
 export default function Wishlist() {
   const { products: getwishlistProducts } = useSelector((state) => state.wishlist);
@@ -51,12 +52,17 @@ export default function Wishlist() {
                 justifyContent="space-between"
                 height="100%"
               >
-                <Avatar
-                  variant="rounded"
-                  src={item.imageCover}
-                  alt={item.title}
-                  sx={{ width: 100, height: 100, mb: 2 }}
-                />
+                <Image
+                src={item.imageCover} // رابط الصورة
+                alt={item.name} // وصف الصورة
+                width={200} // استبدل بالقيمة المناسبة
+                height={200} // استبدل بالقيمة المناسبة
+                style={{
+                    borderTopLeftRadius: '8px',
+                    borderTopRightRadius: '8px',
+                    objectFit: 'cover', // للحفاظ على تناسق الصورة
+                }}
+            />
                 <Typography variant="h6" sx={{ textAlign: "center" }} gutterBottom>
                   {item.title}
                 </Typography>
