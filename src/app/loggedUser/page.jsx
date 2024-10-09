@@ -3,7 +3,7 @@ import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getUserAdress, deleteUserAdress } from "../lib/sliceAdress"; // تأكد من أن المسار صحيح
 import { toast } from "react-hot-toast";
-
+import './logged.css'
 const CustomerData = () => {
   const dispatch = useDispatch();
   const { addresses, loading, error } = useSelector((state) => state.address);
@@ -31,9 +31,7 @@ const CustomerData = () => {
             <thead>
               <tr>
                 <th className="py-2 px-4 font-bold text-left">Name</th>
-                {window.innerWidth > 640 && (
-                  <th className="py-2 px-4 font-bold text-left">Details</th>
-                )}
+                <th className="py-2 px-4 font-bold text-left details-column">Details</th>
                 <th className="py-2 px-4 font-bold text-left">Phone</th>
                 <th className="py-2 px-4 font-bold text-left">City</th>
                 <th className="py-2 px-4 font-bold text-left">Actions</th>
@@ -44,9 +42,7 @@ const CustomerData = () => {
                 addresses.map((customer) => (
                   <tr key={customer._id} className="border-b">
                     <td className="py-2 px-4">{customer.name}</td>
-                    {window.innerWidth > 640 && (
-                      <td className="py-2 px-4">{customer.details || 'N/A'}</td>
-                    )}
+                    <td className="py-2 px-4 details-column">{customer.details || 'N/A'}</td>
                     <td className="py-2 px-4">{customer.phone}</td>
                     <td className="py-2 px-4">{customer.city}</td>
                     <td className="py-2 px-4">
@@ -61,7 +57,7 @@ const CustomerData = () => {
                 ))
               ) : (
                 <tr>
-                  <td colSpan={window.innerWidth > 640 ? 5 : 4} className="py-2 px-4 text-center">
+                  <td colSpan={5} className="py-2 px-4 text-center">
                     No data available to display
                   </td>
                 </tr>

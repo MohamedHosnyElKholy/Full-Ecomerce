@@ -1,0 +1,5 @@
+@media (max-width: 640px) {
+    .details-column {
+      display: none; /* إخفاء عمود التفاصيل على الشاشات الصغيرة */
+    }
+  }
