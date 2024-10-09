@@ -1,34 +1,16 @@
 "use client";
-import * as React from "react";
-import AppBar from "@mui/material/AppBar";
-import Box from "@mui/material/Box";
-import Toolbar from "@mui/material/Toolbar";
-import IconButton from "@mui/material/IconButton";
-import Typography from "@mui/material/Typography";
-import Menu from "@mui/material/Menu";
-import MenuIcon from "@mui/icons-material/Menu";
-import Container from "@mui/material/Container";
-import Button from "@mui/material/Button";
-import MenuItem from "@mui/material/MenuItem";
+import React, { useState } from "react";
 import Link from "next/link";
-import TextField from "@mui/material/TextField";
-import SearchIcon from "@mui/icons-material/Search";
-import FavoriteIcon from "@mui/icons-material/Favorite";
-import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import { useDispatch, useSelector } from "react-redux";
-import { useRouter } from 'next/navigation';
+import { useRouter } from "next/navigation";
 
 const pages = ["Home", "Contact", "About", "SignUp", "Address"];
 
 function ResponsiveAppBar() {
-  const [anchorElNav, setAnchorElNav] = React.useState(null);
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
   const dispatch = useDispatch();
   const { products: cartProducts } = useSelector((state) => state.cart);
   const router = useRouter();
-
-  const handleCloseNavMenu = () => {
-    setAnchorElNav(null);
-  };
 
   const handleLogout = () => {
     localStorage.removeItem("token");
@@ -37,113 +19,64 @@ function ResponsiveAppBar() {
   };
 
   return (
-    <AppBar position="static" sx={{ backgroundColor: "#fff", boxShadow: "none", borderBottom: "1px solid #ccc" }}>
-      <Container maxWidth="xl" sx={{ width: "90%", padding: "15px 0" }}>
-        <Toolbar disableGutters>
-          <Typography
-            variant="h6"
-            noWrap
-            component={Link}
-            href="/"
-            sx={{
-              fontWeight: 700,
-              fontSize: "24px",
-              color: "#000000",
-              textDecoration: "none",
-              mr: 2,
-              display: { xs: "flex", md: "flex" },
-            }}
-          >
-            Exclusive
-          </Typography>
+    <nav className="bg-white shadow-md fixed w-full z-50">
+      <div className="container mx-auto flex justify-between items-center p-4">
+        <Link href="/" className="text-2xl font-bold text-black hover:text-red-500 transition-colors">
+          Exclusive
+        </Link>
 
-          <Box sx={{ display: { xs: "flex", md: "none" }, mr: 2 }}>
-            <IconButton size="large" aria-label="فتح قائمة التنقل" onClick={(e) => setAnchorElNav(e.currentTarget)}>
-              <MenuIcon />
-            </IconButton>
-            <Menu
-              id="menu-appbar"
-              anchorEl={anchorElNav}
-              open={Boolean(anchorElNav)}
-              onClose={handleCloseNavMenu}
-            >
+        <div className="md:hidden">
+          <button onClick={() => setIsMenuOpen(!isMenuOpen)} className="text-2xl">
+            <i className="fas fa-bars"></i>
+          </button>
+          {isMenuOpen && (
+            <div className="absolute bg-white shadow-md mt-2 right-0 z-10">
               {pages.map((page) => (
-                <MenuItem
-                  key={page}
-                  onClick={handleCloseNavMenu}
-                  component={Link}
-                  href={page === "Home" ? "/" : `/${page.toLowerCase()}`}
-                >
-                  <Typography textAlign="center">{page}</Typography>
-                </MenuItem>
+                <Link key={page} href={page === "Home" ? "/" : `/${page.toLowerCase()}`} className="block p-2 hover:bg-gray-200" onClick={() => setIsMenuOpen(false)}>
+                  {page}
+                </Link>
               ))}
-            </Menu>
-          </Box>
+            </div>
+          )}
+        </div>
 
-          <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" }, justifyContent: "center" }}>
-            {pages.map((page) => (
-              <Button
-                key={page}
-                onClick={handleCloseNavMenu}
-                component={Link}
-                href={page === "Home" ? "/" : `/${page.toLowerCase()}`}
-                sx={{ fontWeight: 400, color: "#000", textTransform: "capitalize", mx: 1 }}
-              >
-                {page}
-              </Button>
-            ))}
-          </Box>
-
-          <Box sx={{ display: "flex", alignItems: "center" }}>
-            <TextField
-              variant="outlined"
-              size="small"
-              placeholder="What are you looking for?"
-              sx={{
-                backgroundColor: "#f5f5f5",
-                mr: 1,
-                "& .MuiOutlinedInput-notchedOutline": { border: "none" },
-              }}
-              InputProps={{
-                endAdornment: (
-                  <IconButton component={Link} href="/allProduct">
-                    <SearchIcon />
-                  </IconButton>
-                ),
-              }}
-            />
-            <IconButton component={Link} href="/wishlist" sx={{ mr: 1 }}>
-              <FavoriteIcon />
-            </IconButton>
-            <Link href="/cart" passHref>
-              <IconButton sx={{ position: "relative" }}>
-                <ShoppingCartIcon />
-                {cartProducts?.data?.numOfCartItems > 0 && (
-                  <Box
-                    sx={{
-                      position: "absolute",
-                      top: -5,
-                      right: -5,
-                      bgcolor: "red",
-                      color: "white",
-                      borderRadius: "50%",
-                      width: 20,
-                      height: 20,
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "center",
-                      fontSize: "12px",
-                    }}
-                  >
-                    {cartProducts.data.numOfCartItems}
-                  </Box>
-                )}
-              </IconButton>
+        <div className="hidden md:flex space-x-6">
+          {pages.map((page) => (
+            <Link key={page} href={page === "Home" ? "/" : `/${page.toLowerCase()}`} className="text-black hover:text-red-500 transition-colors font-medium">
+              {page}
             </Link>
-          </Box>
-        </Toolbar>
-      </Container>
-    </AppBar>
+          ))}
+        </div>
+
+        <div className="flex items-center space-x-4">
+          <div className="relative">
+            <input
+              type="text"
+              placeholder="What are you looking for?"
+              className="border border-gray-300 rounded-lg p-2 bg-gray-100 focus:outline-none focus:ring-2 focus:ring-red-500"
+            />
+            <Link href="/allProduct" className="absolute right-2 top-2 text-gray-500 hover:text-red-500 transition-colors">
+              <i className="fas fa-search"></i>
+            </Link>
+          </div>
+
+          {/* أيقونة المفضلة */}
+          <Link href="/wishlist" className="relative">
+            <i className="fas fa-heart text-xl text-gray-700 hover:text-red-500 transition-colors"></i>
+          </Link>
+
+          {/* أيقونة السلة */}
+          <Link href="/cart" className="relative flex items-center">
+            <i className="fas fa-shopping-cart text-xl text-gray-700 hover:text-red-500 transition-colors"></i>
+            {cartProducts?.data?.numOfCartItems > 0 && (
+              <span className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-4 h-4 flex items-center justify-center text-xs font-semibold">
+                {cartProducts.data.numOfCartItems}
+              </span>
+            )}
+          </Link>
+        </div>
+      </div>
+    </nav>
   );
 }
 

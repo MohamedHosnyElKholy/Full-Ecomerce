@@ -1,104 +1,92 @@
 import React from 'react';
-import Container from '@mui/material/Container';
-import { Box, Grid, Typography, Avatar } from "@mui/material";
+import Image from 'next/image';
 import imageone from "../../assets/one (1).png";
 import imagetwo from "../../assets/one (2).png";
 import imagethree from "../../assets/one (3).png";
 import imagefour from "../../assets/one (4).png";
-import LocalShippingIcon from '@mui/icons-material/LocalShipping';
-import HeadsetIcon from '@mui/icons-material/Headset';
-import CheckBoxIcon from '@mui/icons-material/CheckBox';
 
 export default function Page() {
   return (
-    <Container>
-      <Box className="custom-box" sx={{ fontWeight: 600, color: "#DB4444", mb: 2 }}>
+    <div className="container mx-auto p-5">
+      <div className="font-semibold text-red-600 mb-2">
         Featured
-      </Box>
+      </div>
 
-      <Box
-        sx={{
-          display: "flex",
-          gap: "20px",
-          alignItems: "center",
-          marginTop: "20px",
-          flexDirection: { xs: "column", sm: "row" }, // Responsive direction
-        }}
-      >
-        <Typography sx={{ fontWeight: 600, fontSize: "36px", color: "#000" }}>
-          New Arrival
-        </Typography>
-      </Box>
+      <div className="flex flex-col sm:flex-row items-center mt-5 gap-5">
+        <h2 className="font-semibold text-3xl text-black">New Arrival</h2>
+      </div>
 
-      <Grid container spacing={2} sx={{ marginTop: 2 }}>
-        <Grid item xs={12} sm={6}>
-          <Avatar src={imagetwo?.src} sx={{ width: '100%', height: '100%', borderRadius: 0 }} />
-        </Grid>
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 mt-5">
+        <div>
+          <Image 
+            src={imagetwo} 
+            alt="Image Two" 
+            width={500} // قم بتحديد العرض
+            height={300} // قم بتحديد الارتفاع
+            className="w-full h-full rounded-none" 
+          />
+        </div>
 
-        <Grid item xs={12} sm={6}>
-          <Avatar src={imageone?.src} sx={{ width: '100%', height: '50%', borderRadius: 0 }} />
+        <div>
+          <Image 
+            src={imageone} 
+            alt="Image One" 
+            width={500} // قم بتحديد العرض
+            height={300} // قم بتحديد الارتفاع
+            className="w-full h-1/2 rounded-none" 
+          />
 
-          <Grid container spacing={2} sx={{ marginTop: '10px' }}>
-            <Grid item xs={6}>
-              <Avatar src={imagethree?.src} sx={{ width: '100%', height: '100%', borderRadius: 0 }} />
-            </Grid>
-
-            <Grid item xs={6}>
-              <Avatar src={imagefour?.src} sx={{ width: '100%', height: '100%', borderRadius: 0 }} />
-            </Grid>
-          </Grid>
-        </Grid>
-      </Grid>
+          <div className="grid grid-cols-2 gap-2 mt-2">
+            <div>
+              <Image 
+                src={imagethree} 
+                alt="Image Three" 
+                width={250} // قم بتحديد العرض
+                height={200} // قم بتحديد الارتفاع
+                className="w-full h-full rounded-none" 
+              />
+            </div>
+            <div>
+              <Image 
+                src={imagefour} 
+                alt="Image Four" 
+                width={250} // قم بتحديد العرض
+                height={200} // قم بتحديد الارتفاع
+                className="w-full h-full rounded-none" 
+              />
+            </div>
+          </div>
+        </div>
+      </div>
 
       {/* Grid for icons */}
-      <Grid container spacing={2} sx={{ marginTop: '30px', textAlign: 'center' }}>
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-5 mt-10 text-center">
         {[
           {
-            icon: <LocalShippingIcon sx={{ fontSize: '40px', color: '#fff' }} />,
+            icon: <i className="fas fa-truck text-white text-5xl"></i>,
             title: "FREE AND FAST DELIVERY",
             subtitle: "Free delivery for all orders over $140",
           },
           {
-            icon: <HeadsetIcon sx={{ fontSize: '40px', color: '#fff' }} />,
+            icon: <i className="fas fa-headset text-white text-5xl"></i>,
             title: "24/7 CUSTOMER SERVICE",
             subtitle: "Friendly 24/7 customer support",
           },
           {
-            icon: <CheckBoxIcon sx={{ fontSize: '40px', color: '#fff' }} />,
+            icon: <i className="fas fa-check-circle text-white text-5xl"></i>,
             title: "MONEY BACK GUARANTEE",
             subtitle: "We return money within 30 days",
           },
         ].map((item, index) => (
-          <Grid item xs={12} sm={4} key={index}>
-            <Box
-              sx={{
-                display: 'flex',
-                flexDirection: 'column',
-                alignItems: 'center',
-                padding: '15px',
-                backgroundColor: '#000',
-                border: '2px solid #ccc',
-                borderRadius: '8px',
-                maxWidth: '250px',
-                margin: '0 auto',
-              }}
-            >
-              <Box
-                sx={{
-                  marginBottom: '15px',
-                  padding: '10px',
-                  backgroundColor: '#DB4444',
-                  borderRadius: '50%',
-                }}
-              >
-                {item.icon}
-              </Box>
-              <Typography sx={{ color: '#fff', fontWeight: 'bold' }}>{item.title}</Typography>
-              <Typography sx={{ color: '#fff' }}>{item.subtitle}</Typography>
-            </Box>
-          </Grid>
+          <div key={index} className="flex flex-col items-center p-4 bg-black border-2 border-gray-300 rounded-lg max-w-xs mx-auto">
+            <div className="mb-4 p-2 bg-red-600 rounded-full">
+              {item.icon}
+            </div>
+            <h3 className="text-white font-bold">{item.title}</h3>
+            <p className="text-white">{item.subtitle}</p>
+          </div>
         ))}
-      </Grid>
-    </Container>
+      </div>
+    </div>
   );
 }

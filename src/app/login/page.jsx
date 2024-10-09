@@ -1,29 +1,20 @@
 "use client";
 import React, { useState } from "react";
+import Image from "next/image"; // استيراد مكون Image من Next.js
 import img1 from "../../assets/dl.beatsnoop 1.svg";
-import GoogleIcon from "@mui/icons-material/Google";
-import {
-  Avatar,
-  Box,
-  Grid,
-  Input,
-  InputLabel,
-  Typography,
-  Button,
-} from "@mui/material";
 import { useDispatch } from "react-redux"; 
-import FormControl from "@mui/material/FormControl";
 import Link from "next/link";
 import { useFormik } from "formik";
 import axios from "axios";
 import * as Yup from "yup";
 import toast from "react-hot-toast";
-import CircularProgress from '@mui/material/CircularProgress';
 import { useRouter } from "next/navigation";
+
 export default function Signup() {
   const [loading, setLoading] = useState(false);
-  const dispatch = useDispatch(); // تعريف الديسباتش
+  const dispatch = useDispatch();
   const route = useRouter();
+
   const validationSchema = Yup.object().shape({
     email: Yup.string()
       .required("Email is required")
@@ -35,18 +26,18 @@ export default function Signup() {
 
   async function handleReg(values) {
     try {
-      setLoading(true)
+      setLoading(true);
       const response = await axios.post(
         `https://ecommerce.routemisr.com/api/v1/auth/signin`,
         values
       );
       localStorage.setItem('token', response.data.token);
       toast.success(response.data.message);
-      route.push('/')
+      route.push('/');
     } catch (error) {
       toast.error(error.response.data.message);
-    }finally{
-      setLoading(false)
+    } finally {
+      setLoading(false);
     }
   }
 
@@ -60,139 +51,67 @@ export default function Signup() {
   });
 
   return (
-    <Box sx={{ padding: "20px" }}>
-      <Grid
-        container
-        spacing={2}
-        sx={{
-          justifyContent: "center",
-          marginBottom: "20px",
-        }}
-      >
-        <Grid item xs={12} sm={12} md={7}>
-          <Avatar
-            src={img1?.src}
-            sx={{ width: "100%", height: "100%", borderRadius: 0 }}
-          />
-        </Grid>
-        <Grid item xs={12} sm={6} md={5} padding={"70px"}>
-          <Typography
-            variant="h1"
-            fontWeight={500}
-            fontSize={"36px"}
-            marginBottom={"20px"}
-            color={"#000"}
+    <div className="p-5 mt-24">
+      <div className="flex justify-center mb-5">
+        <Image 
+          src={img1} // استخدام مكون Image
+          alt="Avatar" 
+          width={500} // تحديد العرض
+          height={300} // تحديد الارتفاع
+          className="rounded-none" 
+        />
+      </div>
+      <div className="p-10 bg-white shadow-md rounded-lg">
+        <h1 className="text-3xl font-semibold mb-5">Log In</h1>
+        <p className="text-gray-600 mb-8">Enter your details below</p>
+        <form onSubmit={formik.handleSubmit}>
+          <div className="mb-5">
+            <label htmlFor="email-input" className="block mb-2">Email or Phone Number</label>
+            <input
+              id="email-input"
+              name="email"
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+              value={formik.values.email}
+              className="w-full p-3 border rounded bg-gray-100"
+              type="text"
+            />
+            {formik.errors.email && formik.touched.email && (
+              <p className="text-red-500 mt-1">{formik.errors.email}</p>
+            )}
+          </div>
+
+          <div className="mb-5">
+            <label htmlFor="password-input" className="block mb-2">Password</label>
+            <input
+              id="password-input"
+              type="password"
+              name="password"
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+              value={formik.values.password}
+              className="w-full p-3 border rounded bg-gray-100"
+            />
+            {formik.errors.password && formik.touched.password && (
+              <p className="text-red-500 mt-1">{formik.errors.password}</p>
+            )}
+          </div>
+
+          <button
+            type="submit"
+            className={`w-full p-3 bg-red-500 text-white rounded hover:bg-red-600 ${loading ? 'opacity-50 cursor-not-allowed' : ''}`}
+            disabled={loading}
           >
-           Log In
-          </Typography>
-          <Typography
-            variant="body1"
-            fontWeight={400}
-            fontSize={"16px"}
-            marginBottom={"30px"}
-            color={"#555"}
-          >
-            Enter your details below
-          </Typography>
-          <Box component="form" onSubmit={formik.handleSubmit}>
-            <FormControl sx={{ width: "100%", marginBottom: "20px" }}>
-              <InputLabel htmlFor="email-input">Email or Phone Number</InputLabel>
-              <Input
-                id="email-input"
-                name="email"
-                onChange={formik.handleChange}
-                onBlur={formik.handleBlur}
-                value={formik.values.email}
-                sx={{
-                  backgroundColor: "#f9f9f9",
-                  borderRadius: "4px",
-                }}
-              />
-              {formik.errors.email && formik.touched.email && (
-                <Typography
-                  variant="body2"
-                  color="error"
-                  sx={{ marginTop: "8px", fontWeight: 400 }}
-                >
-                  {formik.errors.email}
-                </Typography>
-              )}
-            </FormControl>
+            {loading ? "Loading..." : "Create Account"}
+          </button>
 
-            <FormControl sx={{ width: "100%", marginBottom: "20px" }}>
-              <InputLabel htmlFor="password-input">Password</InputLabel>
-              <Input
-                id="password-input"
-                type="password"
-                name="password"
-                onChange={formik.handleChange}
-                onBlur={formik.handleBlur}
-                value={formik.values.password}
-                sx={{
-                  backgroundColor: "#f9f9f9",
-                  borderRadius: "4px",
-                }}
-              />
-              {formik.errors.password && formik.touched.password && (
-                <Typography
-                  variant="body2"
-                  color="error"
-                  sx={{ marginTop: "8px", fontWeight: 400 }}
-                >
-                  {formik.errors.password}
-                </Typography>
-              )}
-            </FormControl>
-
-            <Button
-              type="submit"
-              variant="contained"
-              sx={{
-                backgroundColor: "#DB4444",
-                fontWeight: 500,
-                marginBottom: "20px",
-                color: "#fff",
-                borderRadius: "4px",
-                width: "100%",
-                padding: "12px",
-                "&:hover": {
-                  backgroundColor: "#c03939",
-                },
-              }}
-            >
-              {loading ? <CircularProgress/> : "Create Account"}
-            </Button>
-
-     
-
-            <Typography sx={{ fontWeight: 400, textAlign: "center" }}>
-              Already have an account?
-              <Link
-                href="/signup"
-                style={{
-                  textDecoration: "underline",
-                  color: "#DB4444",
-                  fontWeight: 500,
-                  marginLeft: "5px",
-                }}
-              >
-                Register
-              </Link>
-              <Link
-                href="/forgotpassword"
-                style={{
-                  textDecoration: "underline",
-                  color: "#DB4444",
-                  fontWeight: 500,
-                  marginLeft: "10px",
-                }}
-              >
-                Forgot Password?
-              </Link>
-            </Typography>
-          </Box>
-        </Grid>
-      </Grid>
-    </Box>
+          <p className="text-center mt-5">
+            Already have an account?
+            <Link href="/signup" className="text-red-500 underline ml-1">Register</Link>
+            <Link href="/forgotpassword" className="text-red-500 underline ml-3">Forgot Password?</Link>
+          </p>
+        </form>
+      </div>
+    </div>
   );
 }

@@ -1,9 +1,7 @@
 "use client";
 import React, { useState, useEffect } from "react";
-import Container from "@mui/material/Container";
-import Grid from "@mui/material/Grid";
-import { Box, Typography } from "@mui/material";
 import Countdown from "react-countdown";
+import Image from 'next/image';
 import imageone from "../../assets/disc.svg";
 
 const Completionist = () => <span>Countdown finished!</span>;
@@ -14,7 +12,6 @@ export default function Page() {
 
   useEffect(() => {
     if (typeof window !== "undefined") {
-      // Safe to access localStorage here
       const endCount = localStorage.getItem("countdownEndDate");
       if (endCount) {
         setCountEndData(Number(endCount));
@@ -31,104 +28,43 @@ export default function Page() {
   }
 
   return (
-    <Box>
-      <Container
-        sx={{
-          backgroundColor: "#000",
-          padding: { xs: "40px 20px", md: "60px 40px" },
-          marginTop: "20px",
-          marginBottom: "20px",
-        }}
-      >
-        <Grid container spacing={2}>
-          <Grid item xs={12} sm={6}>
-            <Typography sx={{ fontWeight: 600, color: "#00FF66" }}>
-              Categories
-            </Typography>
-            <Typography
-              sx={{
-                fontWeight: 600,
-                fontSize: { xs: "24px", md: "36px" },
-                color: "#fff",
-              }}
-            >
-              Enhance Your Music Experience
-            </Typography>
-            <Countdown
-              date={countEndData}
-              renderer={({ days, hours, minutes, seconds, completed }) => {
-                if (completed) {
-                  return <Completionist />;
-                } else {
-                  return (
-                    <Box
-                      sx={{
-                        display: "flex",
-                        gap: "10px",
-                        alignItems: "flex-start",
-                        marginTop: "20px",
-                      }}
-                    >
-                      {[{ label: "days", value: days }, { label: "hours", value: hours }, { label: "minutes", value: minutes }, { label: "seconds", value: seconds }].map(
-                        ({ label, value }) => (
-                          <Box
-                            key={label}
-                            sx={{
-                              textAlign: "center",
-                              backgroundColor: "#fff",
-                              padding: "10px",
-                              borderRadius: "5px",
-                              flex: 1,
-                              minWidth: "60px",
-                            }}
-                          >
-                            <Typography
-                              sx={{
-                                fontWeight: 600,
-                                fontSize: "24px",
-                                color: "#000",
-                              }}
-                            >
-                              {value}
-                            </Typography>
-                            <Typography
-                              sx={{
-                                fontWeight: 400,
-                                fontSize: "11px",
-                                color: "#000",
-                              }}
-                            >
-                              {label}
-                            </Typography>
-                          </Box>
-                        )
-                      )}
-                    </Box>
-                  );
-                }
-              }}
-            />
-          </Grid>
-          <Grid
-            item
-            xs={12}
-            sm={6}
-            sx={{
-              backgroundImage: `url(${imageone.src})`,
-              backgroundSize: "cover",
-              backgroundRepeat: "no-repeat",
-              backgroundPosition: "center",
-              width: "100%",
-              height: { xs: "200px", md: "400px" },
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
+    <div className="bg-black p-10 mt-5 mb-5">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div className="flex flex-col justify-center">
+          <h2 className="font-semibold text-green-500">Categories</h2>
+          <h1 className="font-semibold text-2xl md:text-4xl text-white">
+            Enhance Your Music Experience
+          </h1>
+          <Countdown
+            date={countEndData}
+            renderer={({ days, hours, minutes, seconds, completed }) => {
+              if (completed) {
+                return <Completionist />;
+              } else {
+                return (
+                  <div className="flex gap-2 mt-5">
+                    {[{ label: "days", value: days }, { label: "hours", value: hours }, { label: "minutes", value: minutes }, { label: "seconds", value: seconds }].map(
+                      ({ label, value }) => (
+                        <div
+                          key={label}
+                          className="text-center bg-white p-3 rounded-md flex-1 min-w-[60px]"
+                        >
+                          <p className="font-semibold text-2xl text-black">{value}</p>
+                          <p className="font-normal text-xs text-black">{label}</p>
+                        </div>
+                      )
+                    )}
+                  </div>
+                );
+              }
             }}
-          >
-            {/* Content for the second column goes here */}
-          </Grid>
-        </Grid>
-      </Container>
-    </Box>
+          />
+        </div>
+        <div className="relative w-full h-52 md:h-96 bg-center bg-cover"
+          style={{ backgroundImage: `url(${imageone.src})` }}>
+          {/* محتوى العمود الثاني هنا إذا لزم الأمر */}
+        </div>
+      </div>
+    </div>
   );
 }

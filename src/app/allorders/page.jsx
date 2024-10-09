@@ -2,109 +2,62 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { allOrder } from "../lib/sliceOrder";
-import {
-  Box,
-  Typography,
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
-  Paper,
-  Divider,
-  IconButton,
-  Button
-} from "@mui/material";
-import InfoIcon from "@mui/icons-material/Info"; // Icon for additional information
 import Link from "next/link";
 
 export default function OrdersPage() {
   const dispatch = useDispatch();
   const { products: getorder } = useSelector((state) => state.order);
-console.log(getorder?.data?.data[0]?._id)
+
   useEffect(() => {
     dispatch(allOrder());
   }, [dispatch]);
 
   return (
-    <Box sx={{ padding: "20px", bgcolor: "#f5f5f5", borderRadius: "8px" }}>
-      <Typography
-        variant="h4"
-        gutterBottom
-        align="center"
-        sx={{ color: "#333" }}
-      >
+    <div className="p-5 bg-gray-100 rounded-lg">
+      <h1 className="text-3xl font-bold mb-5 text-center text-gray-800">
         All Orders
-      </Typography>
-      <Divider sx={{ marginBottom: "20px" }} />
-      <TableContainer component={Paper} sx={{ boxShadow: 3 }}>
-        <Table>
-          <TableHead>
-            <TableRow>
-              <TableCell
-                sx={{ fontWeight: "bold", bgcolor: "#1976d2", color: "#fff" }}
-              >
-                Order ID
-              </TableCell>
-              <TableCell
-                sx={{ fontWeight: "bold", bgcolor: "#1976d2", color: "#fff" }}
-              >
-                User Name
-              </TableCell>
-              <TableCell
-                sx={{ fontWeight: "bold", bgcolor: "#1976d2", color: "#fff" }}
-              >
-                Phone Number
-              </TableCell>
-              <TableCell
-                sx={{ fontWeight: "bold", bgcolor: "#1976d2", color: "#fff" }}
-              >
-                City
-              </TableCell>
-              <TableCell
-                sx={{ fontWeight: "bold", bgcolor: "#1976d2", color: "#fff" }}
-              >
-                Total Price
-              </TableCell>
-              <TableCell
-                sx={{ fontWeight: "bold", bgcolor: "#1976d2", color: "#fff" }}
-              >
-                Created At
-              </TableCell>
-              <TableCell sx={{ bgcolor: "#1976d2" }}></TableCell>{" "}
-              {/* Extra cell for the icon */}
-            </TableRow>
-          </TableHead>
-          <TableBody>
+      </h1>
+      <hr className="mb-5" />
+      <div className="overflow-x-auto shadow-md">
+        <table className="min-w-full bg-white border border-gray-300">
+          <thead>
+            <tr className="bg-blue-600 text-white">
+              <th className="py-3 px-4 border-b">Order ID</th>
+              <th className="py-3 px-4 border-b">User Name</th>
+              <th className="py-3 px-4 border-b">Phone Number</th>
+              <th className="py-3 px-4 border-b">City</th>
+              <th className="py-3 px-4 border-b">Total Price</th>
+              <th className="py-3 px-4 border-b">Created At</th>
+              <th className="py-3 px-4 border-b"></th>
+            </tr>
+          </thead>
+          <tbody>
             {getorder?.data?.data.map((order, index) => (
-                <>
-              <TableRow
+              <tr
                 key={order._id}
-                sx={{ bgcolor: index % 2 === 0 ? "#ffffff" : "#f9f9f9" }}
+                className={index % 2 === 0 ? "bg-white" : "bg-gray-100"}
               >
-                <TableCell>{order._id}</TableCell>
-                <TableCell>{order.user.name}</TableCell>
-                <TableCell>{order?.shippingAddress?.phone}</TableCell>
-                <TableCell>{order?.shippingAddress?.city}</TableCell>
-                <TableCell>{order.totalOrderPrice} EGP</TableCell>
-                <TableCell>
+                <td className="py-3 px-4 border-b">{order._id}</td>
+                <td className="py-3 px-4 border-b">{order.user.name}</td>
+                <td className="py-3 px-4 border-b">{order?.shippingAddress?.phone}</td>
+                <td className="py-3 px-4 border-b">{order?.shippingAddress?.city}</td>
+                <td className="py-3 px-4 border-b">{order.totalOrderPrice} EGP</td>
+                <td className="py-3 px-4 border-b">
                   {new Date(order.createdAt).toLocaleDateString()}
-                </TableCell>
-                <TableCell>
-                  <IconButton
-                    color="primary"
+                </td>
+                <td className="py-3 px-4 border-b">
+                  <button
+                    className="text-blue-600 hover:text-blue-800"
                     onClick={() => alert(`Order Details: ${order._id}`)}
                   >
-                    <InfoIcon />
-                  </IconButton>
-                </TableCell>
-              </TableRow>
-                </>
+                    <span className="material-icons">info</span>
+                  </button>
+                </td>
+              </tr>
             ))}
-          </TableBody>
-        </Table>
-      </TableContainer>
-    </Box>
+          </tbody>
+        </table>
+      </div>
+    </div>
   );
 }

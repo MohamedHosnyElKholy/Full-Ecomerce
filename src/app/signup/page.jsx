@@ -1,28 +1,17 @@
 "use client";
 import React, { useState } from "react";
 import img1 from "../../assets/dl.beatsnoop 1.svg";
-import GoogleIcon from "@mui/icons-material/Google";
-import {
-  Avatar,
-  Box,
-  Grid,
-  Input,
-  InputLabel,
-  Typography,
-  Button,
-} from "@mui/material";
-import { useDispatch } from "react-redux"; // استيراد useDispatch
-import FormControl from "@mui/material/FormControl";
-import Link from "next/link";
+import { useDispatch } from "react-redux";
 import { useFormik } from "formik";
 import axios from "axios";
 import * as Yup from "yup";
 import toast from "react-hot-toast";
-import CircularProgress from '@mui/material/CircularProgress';
+import Link from "next/link";
 
 export default function Signup() {
   const [loading, setLoading] = useState(false);
   const dispatch = useDispatch();
+
   const validationSchema = Yup.object().shape({
     name: Yup.string()
       .required("Name is required")
@@ -41,6 +30,7 @@ export default function Signup() {
       .matches(/^\d+$/, "Phone number must be digits only")
       .min(10, "Phone number must be at least 10 digits long"),
   });
+
   async function handleReg(values) {
     try {
       setLoading(true);
@@ -55,7 +45,7 @@ export default function Signup() {
       console.log(error);
       toast.error(error.response.data.message);
     } finally {
-      setLoading(false); // تأكد من تعيينها إلى false هنا
+      setLoading(false);
     }
   }
 
@@ -72,198 +62,114 @@ export default function Signup() {
   });
 
   return (
-    <Box sx={{ padding: "20px" }}>
-      <Grid
-        container
-        spacing={2}
-        sx={{
-          justifyContent: "center",
-          marginBottom: "20px",
-        }}
-      >
-        <Grid item xs={12} sm={12} md={7}>
-          <Avatar
-            src={img1?.src}
-            sx={{ width: "100%", height: "100%", borderRadius: 0 }}
-          />
-        </Grid>
-        <Grid item xs={12} sm={6} md={5} padding={"70px"}>
-          <Typography
-            variant="h1"
-            fontWeight={500}
-            fontSize={"36px"}
-            marginBottom={"20px"}
-            color={"#000"}
-          >
-            Create an account
-          </Typography>
-          <Typography
-            variant="body1"
-            fontWeight={400}
-            fontSize={"16px"}
-            marginBottom={"30px"}
-            color={"#555"}
-          >
-            Enter your details below
-          </Typography>
-          <Box component="form" onSubmit={formik.handleSubmit}>
-            <FormControl sx={{ width: "100%", marginBottom: "20px" }}>
-              <InputLabel htmlFor="name-input">Name</InputLabel>
-              <Input
+    <div className="p-5 mt-24">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div className="md:h-full">
+          <img src={img1.src} alt="Logo" className="w-full h-full object-cover rounded-none" />
+        </div>
+        <div className="p-10">
+          <h1 className="font-semibold text-3xl mb-5">Create an account</h1>
+          <p className="text-gray-600 mb-8">Enter your details below</p>
+          <form onSubmit={formik.handleSubmit}>
+            <div className="mb-4">
+              <label htmlFor="name-input" className="block mb-2">Name</label>
+              <input
                 id="name-input"
                 name="name"
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
                 value={formik.values.name}
-                sx={{
-                  backgroundColor: "#f9f9f9",
-                  borderRadius: "4px",
-                }}
+                className="w-full border rounded p-2 bg-gray-100"
               />
               {formik.errors.name && formik.touched.name && (
-                <Typography
-                  variant="body2"
-                  color="error"
-                  sx={{ marginTop: "8px", fontWeight: 400 }}
-                >
-                  {formik.errors.name}
-                </Typography>
+                <p className="text-red-500">{formik.errors.name}</p>
               )}
-            </FormControl>
+            </div>
 
-            <FormControl sx={{ width: "100%", marginBottom: "20px" }}>
-              <InputLabel htmlFor="email-input">Email or Phone Number</InputLabel>
-              <Input
+            <div className="mb-4">
+              <label htmlFor="email-input" className="block mb-2">Email or Phone Number</label>
+              <input
                 id="email-input"
                 name="email"
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
                 value={formik.values.email}
-                sx={{
-                  backgroundColor: "#f9f9f9",
-                  borderRadius: "4px",
-                }}
+                className="w-full border rounded p-2 bg-gray-100"
               />
               {formik.errors.email && formik.touched.email && (
-                <Typography
-                  variant="body2"
-                  color="error"
-                  sx={{ marginTop: "8px", fontWeight: 400 }}
-                >
-                  {formik.errors.email}
-                </Typography>
+                <p className="text-red-500">{formik.errors.email}</p>
               )}
-            </FormControl>
+            </div>
 
-            <FormControl sx={{ width: "100%", marginBottom: "20px" }}>
-              <InputLabel htmlFor="password-input">Password</InputLabel>
-              <Input
+            <div className="mb-4">
+              <label htmlFor="password-input" className="block mb-2">Password</label>
+              <input
                 id="password-input"
                 type="password"
                 name="password"
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
                 value={formik.values.password}
-                sx={{
-                  backgroundColor: "#f9f9f9",
-                  borderRadius: "4px",
-                }}
+                className="w-full border rounded p-2 bg-gray-100"
               />
               {formik.errors.password && formik.touched.password && (
-                <Typography
-                  variant="body2"
-                  color="error"
-                  sx={{ marginTop: "8px", fontWeight: 400 }}
-                >
-                  {formik.errors.password}
-                </Typography>
+                <p className="text-red-500">{formik.errors.password}</p>
               )}
-            </FormControl>
+            </div>
 
-            <FormControl sx={{ width: "100%", marginBottom: "20px" }}>
-              <InputLabel htmlFor="rePassword-input">Confirm Password</InputLabel>
-              <Input
+            <div className="mb-4">
+              <label htmlFor="rePassword-input" className="block mb-2">Confirm Password</label>
+              <input
                 id="rePassword-input"
                 type="password"
                 name="rePassword"
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
                 value={formik.values.rePassword}
-                sx={{
-                  backgroundColor: "#f9f9f9",
-                  borderRadius: "4px",
-                }}
+                className="w-full border rounded p-2 bg-gray-100"
               />
               {formik.errors.rePassword && formik.touched.rePassword && (
-                <Typography
-                  variant="body2"
-                  color="error"
-                  sx={{ marginTop: "8px", fontWeight: 400 }}
-                >
-                  {formik.errors.rePassword}
-                </Typography>
+                <p className="text-red-500">{formik.errors.rePassword}</p>
               )}
-            </FormControl>
+            </div>
 
-            <FormControl sx={{ width: "100%", marginBottom: "20px" }}>
-              <InputLabel htmlFor="phone-input">Phone Number</InputLabel>
-              <Input
+            <div className="mb-4">
+              <label htmlFor="phone-input" className="block mb-2">Phone Number</label>
+              <input
                 id="phone-input"
                 type="tel"
                 name="phone"
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
                 value={formik.values.phone}
-                sx={{
-                  backgroundColor: "#f9f9f9",
-                  borderRadius: "4px",
-                }}
+                className="w-full border rounded p-2 bg-gray-100"
               />
               {formik.errors.phone && formik.touched.phone && (
-                <Typography
-                  variant="body2"
-                  color="error"
-                  sx={{ marginTop: "8px", fontWeight: 400 }}
-                >
-                  {formik.errors.phone}
-                </Typography>
+                <p className="text-red-500">{formik.errors.phone}</p>
               )}
-            </FormControl>
-            <Button
+            </div>
+
+            <button
               type="submit"
-              variant="contained"
-              sx={{
-                backgroundColor: "#DB4444",
-                fontWeight: 500,
-                marginBottom: "20px",
-                color: "#fff",
-                borderRadius: "4px",
-                width: "100%",
-                padding: "12px",
-                "&:hover": {
-                  backgroundColor: "#c03939",
-                },
-              }}
+              className={`w-full bg-red-600 text-white py-2 rounded ${loading ? 'opacity-50' : ''}`}
+              disabled={loading}
             >
-              {loading ? <CircularProgress/> : "Create Account"}
-            </Button>
-            <Typography sx={{ fontWeight: 400, textAlign: "center" }}>
+              {loading ? (
+                <i className="fas fa-spinner fa-spin"></i>
+              ) : (
+                "Create Account"
+              )}
+            </button>
+            
+            <p className="text-center mt-4">
               Already have an account?
-              <Link
-                href="/login"
-                style={{
-                  textDecoration: "underline",
-                  color: "#DB4444",
-                  fontWeight: 500,
-                  marginLeft: "5px",
-                }}
-              >
+              <Link href="/login" className="text-red-600 underline ml-1">
                 Log in
               </Link>
-            </Typography>
-          </Box>
-        </Grid>
-      </Grid>
-    </Box>
+            </p>
+          </form>
+        </div>
+      </div>
+    </div>
   );
 }

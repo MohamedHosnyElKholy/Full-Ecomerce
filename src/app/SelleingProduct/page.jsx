@@ -1,45 +1,37 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import Container from "@mui/material/Container";
-import { Box, Typography, Button, Grid } from "@mui/material";
-import Link from "next/link";
-import Avatar from "@mui/material/Avatar";
-import FavoriteIcon from "@mui/icons-material/Favorite";
-import CircularProgress from "@mui/material/CircularProgress";
 import { useDispatch, useSelector } from "react-redux";
 import { getProductFlashSeals } from "../lib/sliceProduct";
 import { addWishList } from "../lib/sliceWishlist";
-import Tooltip from "@mui/material/Tooltip";
 import { addCart } from "../lib/sliceCart";
 import toast from "react-hot-toast";
+import Link from "next/link";
 import Image from 'next/image';
 
 export default function Page() {
   const [loadingStates, setLoadingStates] = useState({});
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const dispatch = useDispatch();
+
   useEffect(() => {
-    // Check for token on component mount
     const token = localStorage.getItem("token");
     if (token) {
       setIsLoggedIn(true);
     }
-  }, []);
+    dispatch(getProductFlashSeals());
+  }, [dispatch]);
+
   const allProduct = useSelector((state) => state.getProductFlashSealsSlice.products);
   const { products: wishlistProducts } = useSelector((state) => state.wishlist);
   const { products: cartProducts } = useSelector((state) => state.cart);
-  const dispdash = useDispatch();
-
-  useEffect(() => {
-    dispdash(getProductFlashSeals());
-  }, [dispdash]);
 
   function addwishlistproduct(id) {
     if (!isLoggedIn) {
       toast.error("You need to log in to add the product to your wishlist.");
-      return; // Stop executing if there's no token
+      return;
     }
     try {
-      dispdash(addWishList(id));
+      dispatch(addWishList(id));
       toast.success(wishlistProducts?.data?.message);
     } catch (error) {
       toast.error(wishlistProducts?.data?.message);
@@ -49,11 +41,11 @@ export default function Page() {
   async function addToCartProduct(id) {
     if (!isLoggedIn) {
       toast.error("You need to log in to add the product to your cart.");
-      return; // Stop executing if there's no token
+      return;
     }
     try {
       setLoadingStates((prev) => ({ ...prev, [id]: true }));
-      await dispdash(addCart(id));
+      await dispatch(addCart(id));
       toast.success(cartProducts?.data?.message);
     } catch (error) {
       toast.error(cartProducts?.data?.message);
@@ -63,121 +55,58 @@ export default function Page() {
   }
 
   return (
-    <Container>
-      <Box sx={{ fontWeight: 600, color: "#DB4444", marginBottom: "20px" }}>
-        This Month
-      </Box>
-      <Box
-        sx={{
-          display: "flex",
-          justifyContent: "space-between",
-          alignItems: "center",
-          marginBottom: "20px",
-        }}
-      >
-        <Typography sx={{ fontWeight: 600, fontSize: { xs: "24px", sm: "30px", md: "36px" }, color: "#000" }}>
-          Best Selling Products
-        </Typography>
-        <Link
-          href="/allProduct"
-          style={{
-            background: "#DB4444",
-            padding: "12px 24px",
-            borderRadius: "4px",
-            color: "#fff",
-            textDecoration: "none",
-            fontSize: { xs: "14px", sm: "16px" },
-          }}
-        >
+    <div className="container mx-auto p-5">
+      <div className="font-semibold text-red-600 mb-5">This Month</div>
+      <div className="flex justify-between items-center mb-5">
+        <h1 className="font-semibold text-black text-2xl md:text-4xl">Best Selling Products</h1>
+        <Link href="/allProduct" className="bg-red-600 text-white py-2 px-4 rounded">
           View All
         </Link>
-      </Box>
+      </div>
 
-      <Grid container spacing={4}>
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
         {Array.isArray(allProduct) && allProduct.slice(0, 4).map((el) => (
-          <Grid item xs={12} sm={6} md={4} key={el.id}>
-            <Box
-              sx={{
-                position: "relative",
-                textAlign: "center",
-                boxShadow: "0 4px 12px rgba(0, 0, 0, 0.1)",
-                borderRadius: "8px",
-                padding: "20px",
-                backgroundColor: "#fff",
-                transition: "transform 0.3s ease",
-                "&:hover": {
-                  transform: "scale(1.05)",
-                },
-              }}
-            >
-              <Link href={`/DetialsProduct/${el.id}/${el.category.name}`} style={{ textDecoration: "none" }}>
+          <div key={el.id} className="relative text-center shadow-lg rounded-lg p-5 bg-white transition-transform transform hover:scale-105">
+            <Link href={`/DetialsProduct/${el.id}/${el.category.name}`}>
               <Image
-                src={el.imageCover} // رابط الصورة
-                alt={el.name} // وصف الصورة
-                width={200} // استبدل بالقيمة المناسبة
-                height={200} // استبدل بالقيمة المناسبة
-                style={{
-                    borderTopLeftRadius: '8px',
-                    borderTopRightRadius: '8px',
-                    objectFit: 'cover', // للحفاظ على تناسق الصورة
-                }}
-            />
-                <Box sx={{ textAlign: "left", marginTop: "15px" }}>
-                  <Typography sx={{ fontWeight: "bold", color: "#000", marginBottom: "5px" }}>
-                    {el.title}
-                  </Typography>
-                  <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-                    <Typography component="span" variant="body1" sx={{ fontWeight: 500, color: "#DB4444", marginRight: "10px" }}>
-                      ${el.price}
-                    </Typography>
-                    <Typography component="span" variant="body1" sx={{ fontWeight: 600, color: "#000", fontSize: "14px" }}>
-                      {el.ratingsAverage}
-                    </Typography>
-                  </Box>
-                </Box>
-              </Link>
+                src={el.imageCover}
+                alt={el.name}
+                width={200}
+                height={200}
+                className="rounded-t-lg object-cover"
+              />
+              <div className="text-left mt-3">
+                <h2 className="font-bold text-black mb-2">{el.title}</h2>
+                <div className="flex justify-between items-center">
+                  <span className="font-medium text-red-600">${el.price}</span>
+                  <span className="font-semibold text-black text-sm">{el.ratingsAverage}</span>
+                </div>
+              </div>
+            </Link>
 
-              <Box
-                sx={{
-                  position: "absolute",
-                  top: "15px",
-                  right: "15px",
-                  display: "flex",
-                  flexDirection: "column",
-                  gap: "15px",
-                }}
+            <div className="absolute top-4 right-4 flex flex-col gap-4">
+              <button 
+                onClick={(e) => { e.stopPropagation(); addwishlistproduct(el._id); }} 
+                className="text-gray-600 text-xl hover:text-gray-800 transition-colors"
               >
-                <Tooltip title="Add to Wishlist" arrow>
-                  <FavoriteIcon 
-                    onClick={(e) => {
-                      e.stopPropagation(); // منع حدث النقر من الانتقال إلى العنصر الأب
-                      addwishlistproduct(el._id);
-                    }} 
-                    sx={{ cursor: "pointer", color: "#000", fontSize: "20px" }} 
-                  />
-                </Tooltip>
-              </Box>
+                <i className="fas fa-heart"></i>
+              </button>
+            </div>
 
-              <Button
-                onClick={() => addToCartProduct(el.id)}
-                variant="contained"
-                color="primary"
-                sx={{
-                  borderRadius: "4px",
-                  width: "100%",
-                  "&:hover": { backgroundColor: "#c62828" },
-                }}
-              >
-                {loadingStates[el.id] ? ( // إذا كان قيد التحميل، عرض مؤشر التحميل
-                  <CircularProgress size={24} sx={{ color: "#fff" }} />
-                ) : (
-                  "Add to Cart"
-                )}
-              </Button>
-            </Box>
-          </Grid>
+            <button
+              onClick={() => addToCartProduct(el.id)}
+              className={`bg-blue-600 text-white font-semibold py-2 rounded w-full ${loadingStates[el.id] ? "opacity-50" : ""}`}
+              disabled={loadingStates[el.id]}
+            >
+              {loadingStates[el.id] ? (
+                <i className="fas fa-spinner fa-spin"></i>
+              ) : (
+                "Add to Cart"
+              )}
+            </button>
+          </div>
         ))}
-      </Grid>
-    </Container>
+      </div>
+    </div>
   );
 }

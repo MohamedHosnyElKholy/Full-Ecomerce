@@ -1,9 +1,5 @@
 "use client";
 import React, { useEffect } from "react";
-import Container from "@mui/material/Container";
-import { Grid, Typography, Box, TextField, Button } from "@mui/material";
-import PhoneIcon from "@mui/icons-material/Phone";
-import MessageIcon from "@mui/icons-material/Message";
 import { useRouter } from 'next/navigation';
 
 export default function Contact() {
@@ -15,228 +11,95 @@ export default function Contact() {
       router.push('/login'); 
     }
   }, [router]);
-  return (
-    <Container
-      sx={{
-        minHeight: "100vh", // لضمان أن المحتوى يأخذ على الأقل ارتفاع الشاشة بالكامل
-        display: "flex",
-        alignItems: "center", // المحاذاة الرأسية
-        justifyContent: "center", // المحاذاة الأفقية
-        padding: { xs: "20px 0", sm: "40px 0" }, // تعديل الـ padding بشكل متجاوب
-      }}
-    >
-      <Grid container spacing={4} alignItems="flex-start">
-        {/* معلومات الاتصال */}
-        <Grid
-          item
-          xs={12}
-          sm={6}
-          md={3}
-          sx={{
-            borderRight: { md: "2px solid #e0e0e0" },
-            paddingRight: { md: "20px" },
-            marginBottom: { xs: "30px", md: "0" },
-          }}
-        >
-          <Box sx={{ marginBottom: { xs: "20px", sm: "30px" } }}>
-            <Box
-              sx={{
-                display: "flex",
-                alignItems: "center",
-                gap: { xs: "8px", sm: "10px" },
-                flexDirection: { xs: "column", sm: "row" }, // تغيير الاتجاه للشاشات الصغيرة
-              }}
-            >
-              <PhoneIcon
-                sx={{
-                  backgroundColor: "#DB4444",
-                  color: "#fff",
-                  borderRadius: "50%",
-                  padding: { xs: "15px", sm: "20px" }, // تعديل الـ padding بشكل متجاوب
-                  fontSize: { xs: "40px", sm: "50px" }, // زيادة حجم الأيقونة بشكل متجاوب
-                }}
-              />
-              <Typography variant="h6" sx={{ fontWeight: 600, textAlign: { xs: "center", sm: "left" } }}>
-                Call To Us
-              </Typography>
-            </Box>
-            <Typography
-              sx={{
-                fontSize: { xs: "12px", sm: "14px" },
-                color: "#555",
-                marginTop: "10px",
-                textAlign: { xs: "center", sm: "left" },
-              }}
-            >
-              We are available 24/7, 7 days a week.
-            </Typography>
-            <Typography
-              sx={{
-                fontSize: { xs: "14px", sm: "16px" },
-                fontWeight: 500,
-                marginTop: "10px",
-                textAlign: { xs: "center", sm: "left" },
-              }}
-            >
-              Phone: +8801611112222
-            </Typography>
-          </Box>
 
-          <Box>
-            <Box
-              sx={{
-                display: "flex",
-                alignItems: "center",
-                gap: { xs: "8px", sm: "10px" },
-                flexDirection: { xs: "column", sm: "row" }, // تغيير الاتجاه للشاشات الصغيرة
-              }}
-            >
-              <MessageIcon
-                sx={{
-                  backgroundColor: "#DB4444",
-                  color: "#fff",
-                  borderRadius: "50%",
-                  padding: { xs: "15px", sm: "20px" }, // تعديل الـ padding بشكل متجاوب
-                  fontSize: { xs: "40px", sm: "50px" }, // زيادة حجم الأيقونة بشكل متجاوب
-                }}
-              />
-              <Typography variant="h6" sx={{ fontWeight: 600, textAlign: { xs: "center", sm: "left" } }}>
-                Write To Us
-              </Typography>
-            </Box>
-            <Typography
-              sx={{
-                fontSize: { xs: "12px", sm: "14px" },
-                color: "#555",
-                marginTop: "10px",
-                textAlign: { xs: "center", sm: "left" },
-              }}
-            >
+  return (
+    <div className="min-h-screen flex items-center justify-center p-5">
+      <div className="grid grid-cols-1 md:grid-cols-12 gap-4 w-full">
+        {/* معلومات الاتصال */}
+        <div className="md:col-span-3 border-r md:border-gray-300 pr-5 mb-5 md:mb-0">
+          <div className="mb-5">
+            <div className="flex items-center gap-2">
+              <div className="bg-red-600 text-white rounded-full p-4 text-3xl">
+                <i className="fas fa-phone"></i>
+              </div>
+              <h2 className="text-lg font-semibold">Call To Us</h2>
+            </div>
+            <p className="text-gray-600 mt-2 text-sm">
+              We are available 24/7, 7 days a week.
+            </p>
+            <p className="text-gray-700 mt-2">Phone: +8801611112222</p>
+          </div>
+
+          <div>
+            <div className="flex items-center gap-2">
+              <div className="bg-red-600 text-white rounded-full p-4 text-3xl">
+                <i className="fas fa-envelope"></i>
+              </div>
+              <h2 className="text-lg font-semibold">Write To Us</h2>
+            </div>
+            <p className="text-gray-600 mt-2 text-sm">
               Fill out our form and we will contact you within 24 hours.
-            </Typography>
-            <Typography
-              sx={{
-                fontSize: { xs: "14px", sm: "16px" },
-                fontWeight: 500,
-                marginTop: "10px",
-                textAlign: { xs: "center", sm: "left" },
-              }}
-            >
-              Emails: customer@exclusive.com
-            </Typography>
-            <Typography
-              sx={{
-                fontSize: { xs: "14px", sm: "16px" },
-                fontWeight: 500,
-                textAlign: { xs: "center", sm: "left" },
-              }}
-            >
-              support@exclusive.com
-            </Typography>
-          </Box>
-        </Grid>
+            </p>
+            <p className="text-gray-700 mt-2">Emails: customer@exclusive.com</p>
+            <p className="text-gray-700">support@exclusive.com</p>
+          </div>
+        </div>
 
         {/* النموذج */}
-        <Grid item xs={12} sm={6} md={9}>
-          <Box
-            component="form"
-            sx={{
-              backgroundColor: "#f9f9f9",
-              padding: { xs: "20px", sm: "30px" }, // تعديل الـ padding بشكل متجاوب
-              borderRadius: "8px",
-              boxShadow: "0 4px 12px rgba(0, 0, 0, 0.1)",
-            }}
-          >
-            <Grid container spacing={3}>
+        <div className="md:col-span-9">
+          <form className="bg-gray-100 p-5 rounded-lg shadow-md">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               {/* حقل الاسم */}
-              <Grid item xs={12} sm={4}>
-                <TextField
-                  label="Name"
-                  variant="outlined"
-                  fullWidth
+              <div>
+                <label className="block mb-2">Name</label>
+                <input
+                  type="text"
                   required
-                  InputLabelProps={{ style: { color: "#555" } }}
-                  sx={{
-                    '& .MuiInputBase-root': {
-                      fontSize: { xs: "14px", sm: "16px" },
-                    },
-                  }}
+                  className="w-full p-2 border border-gray-300 rounded"
                 />
-              </Grid>
+              </div>
               {/* حقل البريد الإلكتروني */}
-              <Grid item xs={12} sm={4}>
-                <TextField
-                  label="Email"
+              <div>
+                <label className="block mb-2">Email</label>
+                <input
                   type="email"
-                  variant="outlined"
-                  fullWidth
                   required
-                  InputLabelProps={{ style: { color: "#555" } }}
-                  sx={{
-                    '& .MuiInputBase-root': {
-                      fontSize: { xs: "14px", sm: "16px" },
-                    },
-                  }}
+                  className="w-full p-2 border border-gray-300 rounded"
                 />
-              </Grid>
+              </div>
               {/* حقل الهاتف */}
-              <Grid item xs={12} sm={4}>
-                <TextField
-                  label="Phone"
+              <div>
+                <label className="block mb-2">Phone</label>
+                <input
                   type="tel"
-                  variant="outlined"
-                  fullWidth
                   required
-                  InputLabelProps={{ style: { color: "#555" } }}
-                  sx={{
-                    '& .MuiInputBase-root': {
-                      fontSize: { xs: "14px", sm: "16px" },
-                    },
-                  }}
+                  className="w-full p-2 border border-gray-300 rounded"
                 />
-              </Grid>
+              </div>
 
               {/* حقل الرسالة */}
-              <Grid item xs={12}>
-                <TextField
-                  label="Message"
-                  variant="outlined"
-                  multiline
-                  rows={4}
-                  fullWidth
+              <div className="md:col-span-3">
+                <label className="block mb-2">Message</label>
+                <textarea
                   required
-                  InputLabelProps={{ style: { color: "#555" } }}
-                  sx={{
-                    '& .MuiInputBase-root': {
-                      fontSize: { xs: "14px", sm: "16px" },
-                    },
-                  }}
+                  rows="4"
+                  className="w-full p-2 border border-gray-300 rounded"
                 />
-              </Grid>
+              </div>
 
               {/* زر إرسال الرسالة */}
-              <Grid item xs={12}>
-                <Button
-                  variant="contained"
-                  color="primary"
-                  sx={{
-                    backgroundColor: "#DB4444",
-                    padding: { xs: "10px 20px", sm: "12px 24px" }, // تعديل الـ padding بشكل متجاوب
-                    fontSize: { xs: "14px", sm: "16px" },
-                    fontWeight: 600,
-                    textTransform: "none",
-                    "&:hover": {
-                      backgroundColor: "#c73c3c",
-                    },
-                  }}
+              <div className="md:col-span-3">
+                <button
+                  type="submit"
+                  className="bg-red-600 text-white font-semibold py-2 px-4 rounded hover:bg-red-500"
                 >
                   Send Message
-                </Button>
-              </Grid>
-            </Grid>
-          </Box>
-        </Grid>
-      </Grid>
-    </Container>
+                </button>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
   );
 }

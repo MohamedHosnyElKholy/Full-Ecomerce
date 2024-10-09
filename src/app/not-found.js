@@ -1,45 +1,35 @@
-'use client'
+'use client';
 import React from "react";
-import { Box, Typography, Button, Avatar } from "@mui/material";
-import { useRouter } from 'next/navigation'
+import { useRouter } from 'next/navigation';
 import { motion } from "framer-motion";
-import imageerr from "../assets/404-error.svg";
+import Image from 'next/image';
+import imageerr from "../assets/404-error.svg"; // تأكد من المسار صحيح
+
 export default function NotFound() {
   const router = useRouter();
 
   return (
-    <Box
-      sx={{
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
-        justifyContent: "center",
-        height: "100vh",
-        background: "#f3f4f6",
-        textAlign: "center",
-        padding: "20px",
-      }}
-    >
+    <div className="flex flex-col items-center justify-center h-screen bg-gray-100 text-center p-5">
       {/* Image */}
       <motion.div
         initial={{ opacity: 0, scale: 0.8 }}
         animate={{ opacity: 1, scale: 1 }}
         transition={{ duration: 0.5 }}
       >
-        <Avatar
-          src={imageerr?.src} // ضع صورة مناسبة في هذا المسار
+        <Image
+          src={imageerr} // استخدم الصورة مباشرة
           alt="404 Not Found"
-          sx={{width: '100%', height: '100%', borderRadius: 0}}
+          width={500} // استبدل بالقيمة المناسبة
+          height={300} // استبدل بالقيمة المناسبة
+          className="rounded-none"
         />
       </motion.div>
 
       {/* Text */}
-      <Typography variant="h1" fontWeight={700} sx={{ marginBottom: "20px" }}>
-        Oops!
-      </Typography>
-      <Typography variant="h6" sx={{ marginBottom: "20px", color: "#555" }}>
+      <h1 className="font-bold text-5xl mb-5">Oops!</h1>
+      <h6 className="text-lg mb-5 text-gray-600">
         We can't seem to find the page you're looking for.
-      </Typography>
+      </h6>
 
       {/* Button */}
       <motion.div
@@ -47,14 +37,13 @@ export default function NotFound() {
         whileTap={{ scale: 0.9 }}
         transition={{ duration: 0.3 }}
       >
-        <Button
-          variant="contained"
-          color="primary"
+        <button
           onClick={() => router.push("/")}
+          className="bg-red-600 text-white font-medium rounded py-3 px-6 hover:bg-red-500"
         >
-          Back to Home
-        </Button>
+          <i className="fas fa-home mr-2"></i> Back to Home
+        </button>
       </motion.div>
-    </Box>
+    </div>
   );
 }

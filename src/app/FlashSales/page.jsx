@@ -1,27 +1,11 @@
 "use client";
 import React, { useRef, useEffect, useState } from "react";
-import Container from "@mui/material/Container";
-import {
-  Box,
-  Typography,
-  Button,
-  Card,
-  CardMedia,
-  CardContent,
-  IconButton,
-} from "@mui/material";
-import Tooltip from "@mui/material/Tooltip";
 import Countdown from "react-countdown";
 import Slider from "react-slick";
 import Link from "next/link";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
-import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
-import ArrowBackIcon from "@mui/icons-material/ArrowBack";
-import FavoriteIcon from "@mui/icons-material/Favorite"; // Wishlist icon
-import "./flash.css";
 import { useDispatch, useSelector } from "react-redux";
-import CircularProgress from "@mui/material/CircularProgress";
 import { getProductFlashSeals } from "../lib/sliceProduct";
 import { addWishList } from "../lib/sliceWishlist";
 import { addCart } from "../lib/sliceCart";
@@ -30,32 +14,32 @@ import Image from 'next/image';
 
 export default function Page() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  
   useEffect(() => {
-    // Check for token on component mount
     const token = localStorage.getItem("token");
     if (token) {
       setIsLoggedIn(true);
     }
   }, []);
+  
   const [loadingStates, setLoadingStates] = useState({});
-  const allProduct = useSelector(
-    (state) => state.getProductFlashSealsSlice.products
-  );
+  const allProduct = useSelector((state) => state.getProductFlashSealsSlice.products);
   const { products: wishlistProducts } = useSelector((state) => state.wishlist);
   const { products: cartProducts } = useSelector((state) => state.cart);
-
-  const dispdash = useDispatch();
+  
+  const dispatch = useDispatch();
+  
   useEffect(() => {
-    dispdash(getProductFlashSeals());
-  }, [dispdash]);
+    dispatch(getProductFlashSeals());
+  }, [dispatch]);
 
   function addWishlistProduct(id) {
     if (!isLoggedIn) {
       toast.error("You need to log in to add the product to your wishlist.");
-      return; // Stop executing if there's no token
+      return;
     }
     try {
-      dispdash(addWishList(id));
+      dispatch(addWishList(id));
       toast.success(wishlistProducts?.data?.message || "Added to wishlist!");
     } catch (error) {
       toast.error(error?.data?.message || "An error occurred while adding.");
@@ -65,11 +49,11 @@ export default function Page() {
   async function addToCartProduct(id) {
     if (!isLoggedIn) {
       toast.error("You need to log in to add the product to your cart.");
-      return; // Stop executing if there's no token
+      return;
     }
     try {
       setLoadingStates((prev) => ({ ...prev, [id]: true }));
-      await dispdash(addCart(id));
+      await dispatch(addCart(id));
       toast.success(cartProducts?.data?.message || "Added to cart!");
     } catch (error) {
       toast.error(error?.data?.message || "An error occurred while adding.");
@@ -82,42 +66,23 @@ export default function Page() {
     dots: false,
     infinite: true,
     speed: 500,
-    slidesToShow: 4, // Default number of slides shown
+    slidesToShow: 4,
     slidesToScroll: 1,
     responsive: [
-      {
-        breakpoint: 1200, // Very large screens
-        settings: {
-          slidesToShow: 4,
-        },
-      },
-      {
-        breakpoint: 992, // Medium-sized screens (like desktops)
-        settings: {
-          slidesToShow: 3,
-        },
-      },
-      {
-        breakpoint: 768, // Tablets
-        settings: {
-          slidesToShow: 2,
-        },
-      },
-      {
-        breakpoint: 480, // Mobile phones
-        settings: {
-          slidesToShow: 1,
-        },
-      },
+      { breakpoint: 1200, settings: { slidesToShow: 4 } },
+      { breakpoint: 992, settings: { slidesToShow: 3 } },
+      { breakpoint: 768, settings: { slidesToShow: 2 } },
+      { breakpoint: 480, settings: { slidesToShow: 1 } },
     ],
   };
+
   const sliderRef = useRef(null);
   const totalSeconds = 60 * 60 * 24 * 200;
 
   const Completionist = () => <span>You are good to go!</span>;
 
   const [countdownDate, setCountdownDate] = useState(null);
-
+  
   useEffect(() => {
     if (typeof window !== "undefined") {
       const storedEndDate = localStorage.getItem("countdownEndDate");
@@ -132,38 +97,17 @@ export default function Page() {
   }, []);
 
   if (countdownDate === null) {
-    // You can show a loading indicator here if you want
-    return (
-      <Box sx={{ display: "flex", justifyContent: "center", mt: 4 }}>
-        <CircularProgress />
-      </Box>
-    );
+    return <div className="flex justify-center mt-4"><div className="loader"></div></div>;
   }
 
   return (
-    <Container sx={{ marginTop: { xs: "10px", md: "25px" } }}>
-      <Box className="custom-box" sx={{ fontWeight: 600, color: "#DB4444" }}>
+    <div className="container mx-auto mt-10 px-4">
+      <div className="text-center font-bold text-blue-600">
         Today’s
-      </Box>
-      <Box
-        sx={{
-          display: "flex",
-          flexDirection: { xs: "column", md: "row" }, // Change direction for small screens
-          gap: { xs: "20px", md: "100px" },
-          alignItems: { xs: "flex-start", md: "center" },
-          marginTop: "20px",
-        }}
-      >
-        <Typography
-          sx={{
-            fontWeight: 600,
-            fontSize: { xs: "24px", md: "36px" },
-            color: "#000",
-          }}
-        >
-          Flash Sales
-        </Typography>
-        <Box>
+      </div>
+      <div className="flex flex-col md:flex-row items-center justify-between mt-5">
+        <h2 className="font-bold text-2xl md:text-4xl text-gray-800">Flash Sales</h2>
+        <div className="flex">
           <Countdown
             date={countdownDate}
             renderer={({ days, hours, minutes, seconds, completed }) => {
@@ -171,227 +115,78 @@ export default function Page() {
                 return <Completionist />;
               } else {
                 return (
-                  <Box
-                    sx={{
-                      display: "flex",
-                      gap: "10px", // Make the gap smaller for small screens
-                      alignItems: "flex-start",
-                    }}
-                  >
-                    <Box sx={{ textAlign: "center" }}>
-                      <Typography
-                        sx={{
-                          fontWeight: 500,
-                          fontSize: "12px",
-                          color: "#000",
-                        }}
-                      >
-                        days
-                      </Typography>
-                      <Typography
-                        sx={{
-                          fontWeight: 700,
-                          fontSize: { xs: "24px", md: "32px" },
-                          color: "#000",
-                        }}
-                      >
-                        {days} :
-                      </Typography>
-                    </Box>
-                    <Box sx={{ textAlign: "center" }}>
-                      <Typography
-                        sx={{
-                          fontWeight: 500,
-                          fontSize: "12px",
-                          color: "#000",
-                        }}
-                      >
-                        hours
-                      </Typography>
-                      <Typography
-                        sx={{
-                          fontWeight: 700,
-                          fontSize: { xs: "24px", md: "32px" },
-                          color: "#000",
-                        }}
-                      >
-                        {hours} :
-                      </Typography>
-                    </Box>
-                    <Box sx={{ textAlign: "center" }}>
-                      <Typography
-                        sx={{
-                          fontWeight: 500,
-                          fontSize: "12px",
-                          color: "#000",
-                        }}
-                      >
-                        minutes
-                      </Typography>
-                      <Typography
-                        sx={{
-                          fontWeight: 700,
-                          fontSize: { xs: "24px", md: "32px" },
-                          color: "#000",
-                        }}
-                      >
-                        {minutes} :
-                      </Typography>
-                    </Box>
-                    <Box sx={{ textAlign: "center" }}>
-                      <Typography
-                        sx={{
-                          fontWeight: 500,
-                          fontSize: "12px",
-                          color: "#000",
-                        }}
-                      >
-                        seconds
-                      </Typography>
-                      <Typography
-                        sx={{
-                          fontWeight: 700,
-                          fontSize: { xs: "24px", md: "32px" },
-                          color: "#000",
-                        }}
-                      >
-                        {seconds}
-                      </Typography>
-                    </Box>
-                  </Box>
+                  <div className="flex gap-4 items-center">
+                    <div className="text-center">
+                      <span className="font-medium text-sm">Days</span>
+                      <div className="font-bold text-lg md:text-2xl text-blue-600">{days} :</div>
+                    </div>
+                    <div className="text-center">
+                      <span className="font-medium text-sm">Hours</span>
+                      <div className="font-bold text-lg md:text-2xl text-blue-600">{hours} :</div>
+                    </div>
+                    <div className="text-center">
+                      <span className="font-medium text-sm">Minutes</span>
+                      <div className="font-bold text-lg md:text-2xl text-blue-600">{minutes} :</div>
+                    </div>
+                    <div className="text-center">
+                      <span className="font-medium text-sm">Seconds</span>
+                      <div className="font-bold text-lg md:text-2xl text-blue-600">{seconds}</div>
+                    </div>
+                  </div>
                 );
               }
             }}
           />
-        </Box>
-      </Box>
+        </div>
+      </div>
 
-      <Box sx={{ marginTop: "20px", position: "relative" }}>
+      <div className="relative mt-5">
         <Slider ref={sliderRef} {...settings}>
           {Array.isArray(allProduct) &&
             allProduct.slice(0, 20).map((el) => (
-              <Card
-                key={el.id}
-                sx={{
-                  maxWidth: { xs: "100%", md: 345 }, // Make the width flexible
-                  margin: 2,
-                  transition: "transform 0.3s",
-                  "&:hover": { transform: "scale(1.05)", boxShadow: 3 },
-                }}
-              >
-                <Link
-                  href={`/DetialsProduct/${el.id}/${el.category.name}`}
-                  style={{ textDecoration: "none", color: "inherit" }}
-                >
+              <div key={el.id} className="max-w-xs mx-2">
+                <Link href={`/DetialsProduct/${el.id}/${el.category.name}`} className="block text-center">
                   <Image
-                src={el.imageCover} // رابط الصورة
-                alt={el.name} // وصف الصورة
-                width={200} // استبدل بالقيمة المناسبة
-                height={200} // استبدل بالقيمة المناسبة
-                style={{
-                    borderTopLeftRadius: '8px',
-                    borderTopRightRadius: '8px',
-                    objectFit: 'cover', // للحفاظ على تناسق الصورة
-                }}
-            />
-                  <CardContent>
-                    <Typography
-                      variant="h6"
-                      component="div"
-                      sx={{ fontWeight: 600, color: "#333", mb: 1 }}
-                    >
-                      {el.name}
-                    </Typography>
-                    <Typography
-                      variant="body2"
-                      color="text.secondary"
-                      sx={{ mb: 1 }}
-                    >
-                      {el.description.length > 50
-                        ? `${el.description.slice(0, 50)}...`
-                        : el.description}
-                    </Typography>
-                    <Typography
-                      variant="h6"
-                      color="primary"
-                      sx={{ fontWeight: 700 }}
-                    >
-                      <span>${el.price}</span>
-                    </Typography>
-                  </CardContent>
+                    src={el.imageCover}
+                    alt={el.name}
+                    width={200}
+                    height={200}
+                    className="rounded-lg object-cover transition-transform transform hover:scale-105 m-auto"
+                  />
+                  <div className="p-4 border rounded-lg bg-gray-50 mt-2">
+                    <h3 className="font-semibold text-gray-800">{el.name}</h3>
+                    <p className="text-gray-600">{el.description.length > 50 ? `${el.description.slice(0, 50)}...` : el.description}</p>
+                    <div className="font-bold text-blue-600">${el.price}</div>
+                  </div>
                 </Link>
-                <Box
-                  sx={{
-                    display: "flex",
-                    justifyContent: "space-between",
-                    padding: 2,
-                    borderTop: "1px solid #e0e0e0",
-                  }}
-                >
-                  <Button
-                    onClick={() => addToCartProduct(el.id)}
-                    variant="contained"
-                    color="primary"
-                    sx={{
-                      borderRadius: "4px",
-                      "&:hover": { backgroundColor: "#c62828" },
-                    }}
-                  >
-                    {loadingStates[el.id] ? (
-                      <CircularProgress size={24} sx={{ color: "#fff" }} />
-                    ) : (
-                      "Add to Cart"
-                    )}
-                  </Button>
-                  <Tooltip title="Add to Wishlist" arrow>
-                    <IconButton aria-label="add to wishlist">
-                      <FavoriteIcon
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          addWishlistProduct(el.id);
-                        }}
-                      />
-                    </IconButton>
-                  </Tooltip>
-                </Box>
-              </Card>
+                <div className="flex justify-between p-2 border-t mt-2">
+                  <button 
+                    onClick={() => addToCartProduct(el.id)} 
+                    className="bg-blue-600 text-white py-2 px-4 rounded hover:bg-blue-700 transition-colors">
+                    {loadingStates[el.id] ? "Loading..." : "Add to Cart"}
+                  </button>
+                  <button onClick={(e) => { e.stopPropagation(); addWishlistProduct(el.id); }} className="text-gray-600 hover:text-blue-700 transition-colors">
+                    <i className="fas fa-heart"></i>
+                  </button>
+                </div>
+              </div>
             ))}
         </Slider>
 
-        <Box
-          sx={{
-            position: "absolute",
-            top: "-20px",
-            right: "10px",
-            display: "flex",
-            gap: "10px",
-            zIndex: 1,
-          }}
-        >
-          <ArrowBackIcon
-            onClick={() => sliderRef.current.slickPrev()}
-            sx={{ cursor: "pointer" }}
-          />
-          <ArrowForwardIcon
-            onClick={() => sliderRef.current.slickNext()}
-            sx={{ cursor: "pointer" }}
-          />
-        </Box>
-        <Box sx={{ display: "flex", justifyContent: "center", my: 2 }}>
-          <Link
-            href="/allProduct"
-            style={{
-              background: "#DB4444",
-              padding: "16px 48px",
-              borderRadius: "4px",
-              color: "#fff",
-              textDecoration: "none",
-            }}
-          >
+        <div className="absolute top-0 right-0 flex gap-2 z-10">
+          <button onClick={() => sliderRef.current.slickPrev()} className="bg-white border p-2 rounded shadow hover:bg-gray-100 transition-colors">
+            <i className="fas fa-chevron-left"></i>
+          </button>
+          <button onClick={() => sliderRef.current.slickNext()} className="bg-white border p-2 rounded shadow hover:bg-gray-100 transition-colors">
+            <i className="fas fa-chevron-right"></i>
+          </button>
+        </div>
+        <div className="flex justify-center my-4">
+          <Link href="/allProduct" className="bg-blue-600 text-white py-2 px-4 rounded hover:bg-blue-700 transition-colors">
             View All
           </Link>
-        </Box>
-      </Box>
-    </Container>
+        </div>
+      </div>
+    </div>
   );
 }

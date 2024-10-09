@@ -1,19 +1,11 @@
-'use client'
+'use client';
 import React, { useEffect } from "react";
-import Container from "@mui/material/Container";
-import Box from "@mui/material/Box";
-import Grid from "@mui/material/Grid";
-import Typography from "@mui/material/Typography";
-import Avatar from "@mui/material/Avatar";
-import PeopleIcon from "@mui/icons-material/People";
-import AttachMoneyIcon from "@mui/icons-material/AttachMoney";
-import GroupIcon from "@mui/icons-material/Group";
-import ShowChartIcon from "@mui/icons-material/ShowChart";
-import imageOne from "../../assets/istockphoto-1214561965-612x612.jpg";
-import imageTwo from "../../assets/bussinesOne.png";
-import imageThree from "../../assets/bussinesTwo.png";
-import imageFour from "../../assets/bussinesThree.png";
 import { useRouter } from 'next/navigation';
+import Image from 'next/image'; 
+import image1 from '../../assets/istockphoto-1214561965-612x612.jpg';
+import image2 from '../../assets/bussinesOne.png';
+import image3 from '../../assets/bussinesThree.png';
+import image4 from '../../assets/bussinesTwo.png';
 
 export default function About() {
   const router = useRouter();
@@ -24,136 +16,90 @@ export default function About() {
       router.push('/login'); 
     }
   }, [router]);
+
   return (
-    <Container>
-      <Grid container spacing={2} sx={{ marginTop: "25px" }}>
-        <Grid item xs={12} md={6}>
-          <Typography sx={{ fontWeight: "bold", fontSize: { xs: "32px", sm: "40px", md: "54px" } }}>
-            Our Story
-          </Typography>
-          <Typography sx={{ fontWeight: 400, marginBottom: "25px", fontSize: { xs: "14px", md: "16px" } }}>
+    <div className="container mx-auto">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-24">
+        <div>
+          <h1 className="font-bold text-3xl md:text-5xl mb-4">Our Story</h1>
+          <p className="font-normal mb-6 text-base md:text-lg">
             Launched in 2015, Exclusive is South Asia’s premier online shopping
             marketplace with an active presence in Bangladesh. Supported by a
             wide range of tailored marketing, data and service solutions,
             Exclusive has 10,500 sellers and 300 brands and serves 3 million
             customers across the region.
-          </Typography>
-          <Typography sx={{ fontSize: { xs: "14px", md: "16px" } }}>
+          </p>
+          <p className="text-base md:text-lg">
             Exclusive has more than 1 Million products to offer, growing at a
             very fast rate. Exclusive offers a diverse assortment in categories
             ranging from consumer goods.
-          </Typography>
-        </Grid>
-        <Grid item xs={12} md={6}>
-          <Avatar
-            src={imageOne?.src}
-            sx={{ width: "100%", height: { xs: "auto", md: "100%" }, borderRadius: 0 }}
+          </p>
+        </div>
+        <div>
+          <Image 
+            src={image1} 
+            alt="About Image" 
+            width={500} 
+            height={300} 
+            className="w-full h-auto rounded-lg shadow-lg" 
           />
-        </Grid>
-        {/* Statistics Section */}
-        {[
-          { Icon: PeopleIcon, value: "10.5k", label: "Sellers active on our site" },
-          { Icon: AttachMoneyIcon, value: "33k", label: "Monthly Product Sale" },
-          { Icon: GroupIcon, value: "45.5k", label: "Customers active on our site" },
-          { Icon: ShowChartIcon, value: "25k", label: "Annual gross sale on our site" },
-        ].map(({ Icon, value, label }, index) => (
-          <Grid item xs={12} sm={6} md={3} key={index} sx={{ marginY: "15px" }}>
-            <Box
-              sx={{
-                display: "flex",
-                flexDirection: "column",
-                alignItems: "center",
-                padding: "15px",
-                backgroundColor: "#000",
-                border: "2px solid #ccc",
-                borderRadius: "8px",
-                maxWidth: "250px",
-                margin: "0 auto",
-              }}
-            >
-              <Icon
-                sx={{
-                  fontSize: "40px",
-                  color: "#fff",
-                  marginBottom: "15px",
-                  padding: "10px",
-                  backgroundColor: "#DB4444",
-                  borderRadius: "50%",
-                }}
-              />
-              <Typography sx={{ color: "#fff" }}>{value}</Typography>
-              <Typography sx={{ color: "#fff" }}>{label}</Typography>
-            </Box>
-          </Grid>
-        ))}
+        </div>
+      </div>
 
-        {/* Team Section */}
+      {/* Statistics Section */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 mt-6">
+      {[
+  { value: "10.5k", label: "Sellers active on our site" },
+  { value: "33k", label: "Monthly Product Sale" },
+  { value: "45.5k", label: "Customers active on our site" },
+  { value: "25k", label: "Annual gross sale on our site" },
+].map(({ value, label }, index) => (
+  <div key={index} className="flex flex-col items-center p-4 bg-gray-800 border-2 border-gray-300 rounded-lg max-w-xs mx-auto my-3">
+    <div className="flex items-center justify-center w-12 h-12 rounded-full bg-red-600 mb-4">
+      <span className="text-white text-1xl font-bold">{value}</span>
+    </div>
+    <p className="text-white text-lg font-semibold text-center">{label}</p>
+  </div>
+))}
+      </div>
+
+      {/* Team Section */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 mt-6">
         {[
-          { image: imageTwo, name: "Tom Cruise", title: "Founder & Chairman" },
-          { image: imageThree, name: "Emma Watson", title: "Managing Director" },
-          { image: imageFour, name: "Will Smith", title: "Product Designer" },
+          { image: image2, name: "Tom Cruise", title: "Founder & Chairman" },
+          { image: image3, name: "Emma Watson", title: "Managing Director" },
+          { image: image4, name: "Will Smith", title: "Product Designer" },
         ].map(({ image, name, title }, index) => (
-          <Grid item xs={12} sm={6} md={4} key={index} sx={{ marginY: "15px" }}>
-            <Box
-              sx={{
-                display: "flex",
-                flexDirection: "column",
-                alignItems: "center",
-                padding: "15px",
-                border: "2px solid #ccc",
-                borderRadius: "8px",
-                maxWidth: "250px",
-                margin: "0 auto",
-              }}
-            >
-              <Avatar src={image?.src} sx={{ width: "100%", height: { xs: "auto", md: "300px" }, borderRadius: 0 }} />
-              <Typography>{name}</Typography>
-              <Typography>{title}</Typography>
-            </Box>
-          </Grid>
+          <div key={index} className="flex flex-col items-center p-4 border-2 border-gray-300 rounded-lg max-w-xs mx-auto my-3">
+            <Image 
+              src={image} 
+              alt={name} 
+              width={200} 
+              height={200} 
+              className="w-full h-48 object-cover rounded-full border-2 border-gray-300" 
+            />
+            <p className="mt-2 font-bold">{name}</p>
+            <p className="text-gray-600">{title}</p>
+          </div>
         ))}
+      </div>
 
-        {/* Additional Information Section */}
+      {/* Additional Information Section */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 mt-6">
         {[
-          {
-            icon: <PeopleIcon sx={{ fontSize: "40px", color: "#fff", marginBottom: "15px", padding: "10px", backgroundColor: "#DB4444", borderRadius: "50%" }} />,
-            title: "FREE AND FAST DELIVERY",
-            description: "Free delivery for all orders over $140",
-          },
-          {
-            icon: <GroupIcon sx={{ fontSize: "40px", color: "#fff", marginBottom: "15px", padding: "10px", backgroundColor: "#DB4444", borderRadius: "50%" }} />,
-            title: "24/7 CUSTOMER SERVICE",
-            description: "Friendly 24/7 customer support",
-          },
-          {
-            icon: <ShowChartIcon sx={{ fontSize: "40px", color: "#fff", marginBottom: "15px", padding: "10px", backgroundColor: "#DB4444", borderRadius: "50%" }} />,
-            title: "MONEY BACK GUARANTEE",
-            description: "We return money within 30 days",
-          },
-        ].map(({ icon, title, description }, index) => (
-          <Grid item xs={12} sm={6} md={4} key={index} sx={{ marginY: "15px" }}>
-            <Box
-              sx={{
-                display: "flex",
-                flexDirection: "column",
-                alignItems: "center",
-                padding: "15px",
-                backgroundColor: "#000",
-                border: "2px solid #ccc",
-                borderRadius: "8px",
-                maxWidth: "250px",
-                margin: "0 auto",
-              }}
-            >
-              {icon}
-              <Typography sx={{ color: "#fff", fontSize: '20px', fontWeight: 600, textAlign: 'center' }}>{title}</Typography>
-              <Typography sx={{ color: "#fff", fontSize: '14px', fontWeight: 400, textAlign: 'center' }}>
-                {description}
-              </Typography>
-            </Box>
-          </Grid>
+          { title: "FREE AND FAST DELIVERY", description: "Free delivery for all orders over $140" },
+          { title: "24/7 CUSTOMER SERVICE", description: "Friendly 24/7 customer support" },
+          { title: "MONEY BACK GUARANTEE", description: "We return money within 30 days" },
+        ].map(({ title, description }, index) => (
+          <div key={index} className="flex flex-col items-center p-4 bg-gray-800 border-2 border-gray-300 rounded-lg max-w-xs mx-auto my-3">
+            <div className="flex items-center justify-center w-10 h-10 rounded-full bg-red-600 mb-3">
+              <span className="text-white text-2xl">💰</span>
+            </div>
+            <h2 className="text-white text-xl font-semibold text-center">{title}</h2>
+            <p className="text-white text-sm text-center">{description}</p>
+          </div>
         ))}
-      </Grid>
-    </Container>
+      </div>
+    </div>
   );
 }

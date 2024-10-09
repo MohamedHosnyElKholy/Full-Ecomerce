@@ -1,29 +1,12 @@
 "use client";
 import React, { useEffect } from "react";
-import {
-  Box,
-  Typography,
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
-  Paper,
-  IconButton,
-  CircularProgress,
-  useMediaQuery,
-  useTheme,
-} from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
 import { getUserAdress, deleteUserAdress } from "../lib/sliceAdress"; // تأكد من أن المسار صحيح
-import DeleteIcon from '@mui/icons-material/Delete';
+import { toast } from "react-hot-toast";
 
 const CustomerData = () => {
   const dispatch = useDispatch();
   const { addresses, loading, error } = useSelector((state) => state.address);
-  const theme = useTheme();
-  const isSmallScreen = useMediaQuery(theme.breakpoints.down('sm'));
 
   useEffect(() => {
     dispatch(getUserAdress());
@@ -32,79 +15,65 @@ const CustomerData = () => {
   const handleDelete = async (id) => {
     await dispatch(deleteUserAdress(id));
     dispatch(getUserAdress()); // تحديث قائمة العناوين
+    toast.success("Address deleted successfully");
   };
 
   return (
-    <Box sx={{ padding: { xs: "10px", sm: "20px" } }}>
-      <Typography
-        variant="h4"
-        align="center"
-        sx={{
-          marginBottom: { xs: 2, sm: 3 },
-          fontSize: { xs: "24px", sm: "32px" },
-        }}
-      >
-        Customer Data
-      </Typography>
+    <div className="p-5">
+      <h4 className="text-center text-2xl mb-5">Customer Data</h4>
       {loading ? (
-        <Box sx={{ display: "flex", justifyContent: "center", mt: 4 }}>
-          <CircularProgress />
-        </Box>
+        <div className="flex justify-center mt-4">
+          <div className="loader"></div>
+        </div>
       ) : (
-        <TableContainer component={Paper} sx={{ overflowX: "auto" }}>
-          <Table
-            sx={{
-              minWidth: 650,
-              [`& .${'MuiTableCell-head'}`]: {
-                backgroundColor: theme.palette.grey[200],
-              },
-              [`& .${'MuiTableCell-body'}`]: {
-                fontSize: { xs: "14px", sm: "16px" },
-              },
-            }}
-            aria-label="customer data table"
-          >
-            <TableHead>
-              <TableRow>
-                <TableCell sx={{ fontWeight: 'bold' }}>Name</TableCell>
-                {!isSmallScreen && <TableCell sx={{ fontWeight: 'bold' }}>Details</TableCell>}
-                <TableCell sx={{ fontWeight: 'bold' }}>Phone</TableCell>
-                <TableCell sx={{ fontWeight: 'bold' }}>City</TableCell>
-                <TableCell sx={{ fontWeight: 'bold' }}>Actions</TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
+        <div className="overflow-x-auto">
+          <table className="min-w-full bg-white">
+            <thead>
+              <tr>
+                <th className="py-2 px-4 font-bold text-left">Name</th>
+                {window.innerWidth > 640 && (
+                  <th className="py-2 px-4 font-bold text-left">Details</th>
+                )}
+                <th className="py-2 px-4 font-bold text-left">Phone</th>
+                <th className="py-2 px-4 font-bold text-left">City</th>
+                <th className="py-2 px-4 font-bold text-left">Actions</th>
+              </tr>
+            </thead>
+            <tbody>
               {addresses.length > 0 ? (
                 addresses.map((customer) => (
-                  <TableRow key={customer._id}>
-                    <TableCell>{customer.name}</TableCell>
-                    {!isSmallScreen && <TableCell>{customer.details || 'N/A'}</TableCell>}
-                    <TableCell>{customer.phone}</TableCell>
-                    <TableCell>{customer.city}</TableCell>
-                    <TableCell>
-                      <IconButton aria-label="delete" onClick={() => handleDelete(customer._id)}>
-                        <DeleteIcon color="error" />
-                      </IconButton>
-                    </TableCell>
-                  </TableRow>
+                  <tr key={customer._id} className="border-b">
+                    <td className="py-2 px-4">{customer.name}</td>
+                    {window.innerWidth > 640 && (
+                      <td className="py-2 px-4">{customer.details || 'N/A'}</td>
+                    )}
+                    <td className="py-2 px-4">{customer.phone}</td>
+                    <td className="py-2 px-4">{customer.city}</td>
+                    <td className="py-2 px-4">
+                      <button
+                        className="text-red-500 hover:text-red-700"
+                        onClick={() => handleDelete(customer._id)}
+                      >
+                        <i className="fas fa-trash"></i>
+                      </button>
+                    </td>
+                  </tr>
                 ))
               ) : (
-                <TableRow>
-                  <TableCell colSpan={isSmallScreen ? 4 : 5} align="center">
+                <tr>
+                  <td colSpan={window.innerWidth > 640 ? 5 : 4} className="py-2 px-4 text-center">
                     No data available to display
-                  </TableCell>
-                </TableRow>
+                  </td>
+                </tr>
               )}
-            </TableBody>
-          </Table>
-        </TableContainer>
+            </tbody>
+          </table>
+        </div>
       )}
       {error && (
-        <Typography color="error" align="center" sx={{ mt: 2 }}>
-          {error}
-        </Typography>
+        <p className="text-red-500 text-center mt-2">{error}</p>
       )}
-    </Box>
+    </div>
   );
 };
 

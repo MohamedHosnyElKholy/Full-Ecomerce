@@ -1,15 +1,6 @@
 "use client";
-import React, {useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { addAddress } from "../lib/sliceAdress"; // تأكد من تحديث المسار الصحيح
-import {
-  Box,
-  Button,
-  FormControl,
-  Input,
-  InputLabel,
-  Typography,
-  Grid,
-} from "@mui/material";
 import toast from "react-hot-toast";
 import { useDispatch, useSelector } from "react-redux";
 import { useRouter } from 'next/navigation';
@@ -23,11 +14,11 @@ export default function AddAddressPage() {
       router.push('/login'); 
     }
   }, [router]);
+
   const [name, setName] = useState("");
   const [details, setDetails] = useState("");
   const [phone, setPhone] = useState("");
   const [city, setCity] = useState("");
-  const { products: addressProducts } = useSelector((state) => state.address);
   const dispatch = useDispatch();
 
   const handleSubmit = (e) => {
@@ -48,67 +39,61 @@ export default function AddAddressPage() {
   };
 
   return (
-    <Box sx={{ padding: "20px" }}>
-      <Typography variant="h4" marginBottom="20px">
-        Add New Address
-      </Typography>
+    <div className="p-5 mt-24">
+      <h1 className="text-3xl font-bold mb-5">Add New Address</h1>
       <form onSubmit={handleSubmit}>
-        <Grid container spacing={2}>
-          <Grid item xs={12} md={6}>
-            <FormControl fullWidth margin="normal">
-              <InputLabel htmlFor="name-input">Name</InputLabel>
-              <Input
-                id="name-input"
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-                required
-              />
-            </FormControl>
-          </Grid>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="mb-4">
+            <label htmlFor="name-input" className="block mb-1">Name</label>
+            <input
+              id="name-input"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              required
+              className="border border-gray-300 p-2 w-full rounded"
+            />
+          </div>
 
-          <Grid item xs={12} md={6}>
-            <FormControl fullWidth margin="normal">
-              <InputLabel htmlFor="details-input">Details</InputLabel>
-              <Input
-                id="details-input"
-                value={details}
-                onChange={(e) => setDetails(e.target.value)}
-                required
-              />
-            </FormControl>
-          </Grid>
+          <div className="mb-4">
+            <label htmlFor="details-input" className="block mb-1">Details</label>
+            <input
+              id="details-input"
+              value={details}
+              onChange={(e) => setDetails(e.target.value)}
+              required
+              className="border border-gray-300 p-2 w-full rounded"
+            />
+          </div>
 
-          <Grid item xs={12} md={6}>
-            <FormControl fullWidth margin="normal">
-              <InputLabel htmlFor="phone-input">Phone</InputLabel>
-              <Input
-                id="phone-input"
-                value={phone}
-                onChange={(e) => setPhone(e.target.value)}
-                required
-              />
-            </FormControl>
-          </Grid>
+          <div className="mb-4">
+            <label htmlFor="phone-input" className="block mb-1">Phone</label>
+            <input
+              id="phone-input"
+              value={phone}
+              onChange={(e) => setPhone(e.target.value)}
+              required
+              className="border border-gray-300 p-2 w-full rounded"
+            />
+          </div>
 
-          <Grid item xs={12} md={6}>
-            <FormControl fullWidth margin="normal">
-              <InputLabel htmlFor="city-input">City</InputLabel>
-              <Input
-                id="city-input"
-                value={city}
-                onChange={(e) => setCity(e.target.value)}
-                required
-              />
-            </FormControl>
-          </Grid>
+          <div className="mb-4">
+            <label htmlFor="city-input" className="block mb-1">City</label>
+            <input
+              id="city-input"
+              value={city}
+              onChange={(e) => setCity(e.target.value)}
+              required
+              className="border border-gray-300 p-2 w-full rounded"
+            />
+          </div>
 
-          <Grid item xs={12}>
-            <Button type="submit" variant="contained" color="primary">
+          <div className="col-span-2">
+            <button type="submit" className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">
               Add Address
-            </Button>
-          </Grid>
-        </Grid>
+            </button>
+          </div>
+        </div>
       </form>
-    </Box>
+    </div>
   );
 }

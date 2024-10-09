@@ -1,15 +1,14 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import Container from "@mui/material/Container";
-import { Grid, Typography, Box, Link } from "@mui/material";
 import { useParams } from "next/navigation";
 import { useSelector, useDispatch } from "react-redux";
 import { getProductDetilas } from "../../../lib/sliceDetialsProduct";
 import { getProductFlashSeals } from "../../../lib/sliceProduct";
 import Image from 'next/image';
+import Link from 'next/link'; // أضف هذا السطر
 
 export default function Page() {
-    const { id } = useParams(); // استخدم id فقط
+    const { id } = useParams();
     const dispatch = useDispatch();
 
     const detialsProduct = useSelector((state) => state.getProductDetilasSlice.product);
@@ -38,213 +37,84 @@ export default function Page() {
         setActiveImage(imageCover);
     }, [imageCover]);
 
-    // فلترة المنتجات ذات الصلة
     const relatedProducts = products.filter((el) => 
-        el.category._id === x._id && el._id !== id // تأكد من أن المنتج ليس هو المنتج الحالي
+        el.category._id === x._id && el._id !== id
     );
 
     return (
-        <Container>
-            <Grid container spacing={4} sx={{ marginTop: "30px" }}>
+        <div className="container mx-auto p-5 mt-24">
+            <div className="grid grid-cols-1 md:grid-cols-12 gap-4 mt-8">
                 {/* صور المنتج المصغرة */}
-                <Grid item xs={12} sm={6} md={2}>
-                    <Box
-                        sx={{
-                            display: "flex",
-                            flexDirection: { xs: "row", md: "column" },
-                            gap: { xs: "10px", md: "20px" },
-                            overflowX: { xs: "auto", md: "visible" },
-                        }}
-                    >
-                        {images.map((img, index) => (
-                            <Box
-                                key={index}
-                                sx={{
-                                    width: { xs: "60px", md: "90px" },
-                                    height: { xs: "60px", md: "90px" },
-                                    borderRadius: "12px", // حواف أكثر نعومة
-                                    boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.1)", // إضافة ظل خفيف
-                                    cursor: "pointer",
-                                    overflow: "hidden", // لضمان احتواء الصورة داخل المربع
-                                    transition: "transform 0.3s ease-in-out", // تأثير تكبير خفيف عند التمرير
-                                    "&:hover": {
-                                        transform: "scale(1.05)",
-                                    },
-                                    flexShrink: 0,
-                                }}
-                                onClick={() => setActiveImage(img)}
-                            >
-                                <Image
-                                    src={img} // رابط الصورة
-                                    alt={`Image ${index}`} // وصف الصورة
-                                    layout="responsive" // لتناسب الأبعاد المحددة
-                                    width={90} // القيمة العلوية (يمكنك تعديلها)
-                                    height={90} // القيمة السفلية (يمكنك تعديلها)
-                                    objectFit="cover" // للحفاظ على تناسق الصورة
-                                />
-                            </Box>
-                        ))}
-                    </Box>
-                </Grid>
+                <div className="md:col-span-2 flex flex-col gap-2 overflow-x-auto">
+                    {images.map((img, index) => (
+                        <div
+                            key={index}
+                            className="w-16 h-16 md:w-24 md:h-24 rounded-lg shadow hover:scale-105 transition-transform cursor-pointer"
+                            onClick={() => setActiveImage(img)}
+                        >
+                            <Image
+                                src={img}
+                                alt={`Image ${index}`}
+                                layout="responsive"
+                                width={90}
+                                height={90}
+                                objectFit="cover"
+                                className="rounded-lg"
+                            />
+                        </div>
+                    ))}
+                </div>
                 
                 {/* الصورة الرئيسية */}
-                <Grid item xs={12} sm={6} md={5}>
-                    <Box
-                        sx={{
-                            display: "flex",
-                            justifyContent: "center",
-                            alignItems: "center",
-                            width: "100%",
-                            height: "100%",
-                        }}
-                    >
-                        <Image
-                            src={activeImage} // استخدم activeImage هنا
-                            alt={title} // استخدم title كبديل لوصف الصورة
-                            width={500} // استبدل بالقيمة المناسبة
-                            height={500} // استبدل بالقيمة المناسبة
-                            style={{
-                                borderTopLeftRadius: '8px',
-                                borderTopRightRadius: '8px',
-                                objectFit: 'cover', // للحفاظ على تناسق الصورة
-                            }}
-                        />
-                    </Box>
-                </Grid>
+                <div className="md:col-span-5 flex justify-center items-center">
+                    <Image
+                        src={activeImage}
+                        alt={title}
+                        width={500}
+                        height={500}
+                        className="rounded-lg object-cover"
+                    />
+                </div>
                 
                 {/* تفاصيل المنتج */}
-                <Grid item xs={12} sm={6} md={5}>
-                    <Box
-                        sx={{
-                            padding: { xs: "20px", sm: "25px" },
-                            border: "1px solid #e0e0e0",
-                            borderRadius: "16px", // حواف دائرية بشكل أكبر
-                            backgroundColor: "#fafafa", // لون خلفية خفيف
-                            boxShadow: "0px 8px 20px rgba(0, 0, 0, 0.1)", // ظل خفيف
-                            display: "flex",
-                            flexDirection: "column",
-                            gap: { xs: "15px", sm: "20px" },
-                        }}
-                    >
-                        <Typography
-                            sx={{
-                                fontWeight: 700, // زيادة وزن الخط
-                                fontSize: { xs: "22px", md: "26px" }, // خط أكبر قليلاً
-                                fontFamily: "Inter",
-                                color: "#333", // لون غامق لراحة العين
-                            }}
-                        >
-                            {title}
-                        </Typography>
-                        <Box
-                            sx={{
-                                display: "flex",
-                                flexWrap: "wrap",
-                                gap: { xs: "12px", sm: "25px" },
-                                alignItems: "center",
-                            }}
-                        >
-                            <Typography sx={{ color: "#555" }}>Sold: {sold}</Typography>
-                            <Typography sx={{ color: "#555" }}>
-                                Rating: {ratingsAverage} ({Array.isArray(reviews) ? reviews.length : 0} Reviews)
-                            </Typography>
-                        </Box>
-                        <Typography
-                            sx={{
-                                fontWeight: 500,
-                                fontSize: { xs: "22px", md: "24px" },
-                                color: "#1976d2", // لون مميز للسعر
-                            }}
-                        >
-                            ${price}
-                        </Typography>
-                        <Typography
-                            sx={{
-                                marginTop: "20px",
-                                fontSize: { xs: "16px", md: "18px" },
-                                color: "#555",
-                            }}
-                        >
-                            {description}
-                        </Typography>
-                        <Typography sx={{ marginTop: "15px", fontWeight: 600, color: "#444" }}>
-                            Category: {x.name}
-                        </Typography>
-                        <Typography sx={{ marginTop: "5px", fontWeight: 600, color: "#444" }}>
-                            Brand: {brand.name}
-                        </Typography>
-                    </Box>
-                </Grid>
-            </Grid>
+                <div className="md:col-span-5 bg-gray-100 p-5 rounded-lg shadow-md flex flex-col gap-4">
+                    <h2 className="font-bold text-2xl md:text-3xl text-gray-800">{title}</h2>
+                    <div className="flex flex-wrap gap-3 items-center">
+                        <p className="text-gray-600">Sold: {sold}</p>
+                        <p className="text-gray-600">Rating: {ratingsAverage} ({reviews.length} Reviews)</p>
+                    </div>
+                    <p className="text-blue-600 text-2xl">${price}</p>
+                    <p className="text-gray-700 text-lg">{description}</p>
+                    <p className="font-semibold text-gray-800">Category: {x.name}</p>
+                    <p className="font-semibold text-gray-800">Brand: {brand.name}</p>
+                </div>
+            </div>
 
-            <Box sx={{ marginTop: "50px" }}>
-                <Typography variant="h5" sx={{ marginBottom: "25px", fontWeight: 600 }}>
-                    Related Products
-                </Typography>
+            <div className="mt-12">
+                <h3 className="text-2xl font-semibold mb-6">Related Products</h3>
                 
-                <Grid container spacing={4}>
+                <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
                     {relatedProducts.map((product) => (
-                        <Grid item xs={12} sm={6} md={3} key={product._id}>
+                        <div className="border border-gray-300 rounded-lg p-4 transition-transform hover:scale-105 shadow-md cursor-pointer" key={product._id}>
                             <Link href={`/DetialsProduct/${product._id}/${product.category.name}`} passHref>
-                                <Box
-                                    sx={{
-                                        border: "1px solid #e0e0e0",
-                                        borderRadius: "12px",
-                                        padding: "15px",
-                                        transition: "transform 0.3s, box-shadow 0.3s",
-                                        backgroundColor: "#fff", // خلفية بيضاء للمربع
-                                        "&:hover": {
-                                            transform: "scale(1.05)",
-                                            boxShadow: "0px 4px 12px rgba(0, 0, 0, 0.2)",
-                                        },
-                                        cursor: "pointer",
-                                        textDecoration: "none", // إزالة الخط تحت النص
-                                    }}
-                                >
-                                    <Box
-                                        sx={{
-                                            width: "100%",
-                                            height: "200px",
-                                            borderRadius: "12px",
-                                            marginBottom: "10px",
-                                            overflow: "hidden", // لضمان احتواء الصورة داخل الحاوية
-                                        }}
-                                    >
-                                        <Image
-                                            src={product.imageCover} // رابط الصورة
-                                            alt={product.title} // وصف الصورة
-                                            layout="responsive" // لتناسب الأبعاد المحددة
-                                            width={500} // القيمة العلوية (يمكنك تعديلها)
-                                            height={200} // القيمة السفلية (يمكنك تعديلها)
-                                            objectFit="cover" // للحفاظ على تناسق الصورة
-                                        />
-                                    </Box>
-                                    <Typography
-                                        sx={{
-                                            fontWeight: 600,
-                                            fontSize: "18px",
-                                            color: "#333", // لون غامق
-                                            marginBottom: "5px", // هوامش إضافية بين النصوص
-                                        }}
-                                    >
-                                        {product.title}
-                                    </Typography>
-                                    <Typography
-                                        sx={{
-                                            fontSize: "16px",
-                                            color: "#1976d2", // لون للسعر
-                                            fontWeight: 500, // وزن خط أقل
-                                            marginBottom: "0", // إزالة الهوامش السفلية
-                                        }}
-                                    >
-                                        ${product.price}
-                                    </Typography>
-                                </Box>
+                                <div className="h-48 rounded-lg overflow-hidden mb-2">
+                                    <Image
+                                        src={product.imageCover}
+                                        alt={product.title}
+                                        layout="responsive"
+                                        width={500}
+                                        height={200}
+                                        objectFit="cover"
+                                        className="rounded-lg"
+                                    />
+                                </div>
+                                <h4 className="font-semibold text-lg text-gray-800">{product.title}</h4>
+                                <p className="text-blue-600 font-medium">${product.price}</p>
                             </Link>
-                        </Grid>
+                        </div>
                     ))}
-                </Grid>
-            </Box>
-        </Container>
+                </div>
+            </div>
+        </div>
     );
 }

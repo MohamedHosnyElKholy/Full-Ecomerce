@@ -1,37 +1,31 @@
 "use client";
 import React, { useRef } from "react";
-import Container from "@mui/material/Container";
-import { Box, Typography } from "@mui/material";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
-import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
-import ArrowBackIcon from "@mui/icons-material/ArrowBack";
-import AccessTimeIcon from "@mui/icons-material/AccessTime";
-import './cat.css';
 
 export default function Page() {
   const settings = {
     dots: false,
     infinite: true,
     speed: 500,
-    slidesToShow: 3, // العرض الافتراضي
+    slidesToShow: 3,
     slidesToScroll: 1,
     responsive: [
       {
-        breakpoint: 1024, // للحجم الكبير
+        breakpoint: 1024,
         settings: {
           slidesToShow: 3,
         }
       },
       {
-        breakpoint: 768, // للحجم المتوسط
+        breakpoint: 768,
         settings: {
           slidesToShow: 2,
         }
       },
       {
-        breakpoint: 480, // للحجم الصغير
+        breakpoint: 480,
         settings: {
           slidesToShow: 1,
         }
@@ -42,75 +36,31 @@ export default function Page() {
   const sliderRef = useRef(null);
 
   return (
-    <Container>
-      <Box className="custom-box" sx={{ fontWeight: 600, color: "#DB4444", margin: "25px 0" }}>
-        Categories
-      </Box>
-      <Box
-        sx={{
-          display: "flex",
-          justifyContent: "space-between",
-          alignItems: "center",
-          marginTop: "20px",
-        }}
-      >
-        <Typography sx={{ fontWeight: 600, fontSize: { xs: "24px", sm: "30px", md: "36px" }, color: "#000" }}>
-          Browse By Category
-        </Typography>
-        <Box></Box>
-      </Box>
-      <Box sx={{ marginTop: "20px", position: "relative" }}>
+    <div className="container mx-auto py-6">
+      <div className="font-bold text-red-600 mb-6">Categories</div>
+      <div className="flex justify-between items-center mb-4">
+        <h2 className="font-bold text-3xl text-black">Browse By Category</h2>
+      </div>
+      <div className="relative">
         <Slider ref={sliderRef} {...settings}>
           {Array.from({ length: 10 }).map((_, index) => (
-            <Box
-              key={index}
-              sx={{
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                padding: "20px",
-                flexDirection: "column",
-                gap: "10px",
-                margin: "10px",
-                border: "2px solid #ccc",
-                borderRadius: "8px",
-                width: "180px",
-                textAlign: "center",
-                backgroundColor: "#f9f9f9",
-                transition: "background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease",
-                "&:hover": {
-                  backgroundColor: "#DB4444",
-                  color: "#fff",
-                  borderColor: "#DB4444",
-                }
-              }}
-            >
-              <AccessTimeIcon sx={{ fontSize: 40 }} />
-              <Typography sx={{ fontWeight: 400 }}>Smart Watch</Typography>
-            </Box>
+            <div key={index} className="flex flex-col items-center justify-center p-5 m-2 border-2 border-gray-300 rounded-lg bg-gray-100 hover:bg-red-600 hover:text-white transition-all duration-300">
+              <i className="fas fa-clock text-4xl"></i>
+              <p className="font-normal">Smart Watch</p>
+            </div>
           ))}
         </Slider>
-        <Box
-          sx={{
-            position: "absolute",
-            top: "50%",
-            right: "10px",
-            display: "flex",
-            gap: "10px",
-            zIndex: 1,
-            transform: "translateY(-50%)"
-          }}
-        >
-          <ArrowBackIcon
+        <div className="absolute top-1/2 right-2 flex gap-2 transform -translate-y-1/2 z-10">
+          <i
+            className="fas fa-arrow-left cursor-pointer text-2xl"
             onClick={() => sliderRef.current.slickPrev()}
-            sx={{ cursor: "pointer", fontSize: "30px" }}
-          />
-          <ArrowForwardIcon
+          ></i>
+          <i
+            className="fas fa-arrow-right cursor-pointer text-2xl"
             onClick={() => sliderRef.current.slickNext()}
-            sx={{ cursor: "pointer", fontSize: "30px" }}
-          />
-        </Box>
-      </Box>
-    </Container>
+          ></i>
+        </div>
+      </div>
+    </div>
   );
 }

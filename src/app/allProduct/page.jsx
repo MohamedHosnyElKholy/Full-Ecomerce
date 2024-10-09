@@ -1,33 +1,17 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import {
-  Container,
-  Box,
-  Typography,
-  Button,
-  Grid,
-  IconButton,
-  TextField,
-  Select,
-  MenuItem,
-  InputLabel,
-  FormControl,
-} from "@mui/material";
 import Image from 'next/image';
-import Tooltip from "@mui/material/Tooltip";
-import FavoriteIcon from '@mui/icons-material/Favorite';
-import CircularProgress from "@mui/material/CircularProgress";
-import Link from "next/link";
 import { useDispatch, useSelector } from "react-redux";
 import { getProductFlashSeals } from "../lib/sliceProduct";
 import { addWishList } from "../lib/sliceWishlist";
 import { addCart } from "../lib/sliceCart";
 import toast from "react-hot-toast";
 import { useRouter } from 'next/navigation';
+import Link from "next/link";
 
 export default function ProductsPage() {
   const [loadingStates, setLoadingStates] = useState({});
-  const [searchTerm, setSearchTerm] = useState(""); // حالة لمصطلح البحث
+  const [searchTerm, setSearchTerm] = useState("");
   const router = useRouter();
 
   useEffect(() => {
@@ -36,6 +20,7 @@ export default function ProductsPage() {
       router.push('/login'); 
     }
   }, [router]);
+
   const dispatch = useDispatch();
   const allProduct = useSelector((state) => state.getProductFlashSealsSlice.products);
   const { products: wishlistProducts } = useSelector((state) => state.wishlist);
@@ -45,16 +30,16 @@ export default function ProductsPage() {
     dispatch(getProductFlashSeals());
   }, [dispatch]);
 
-  function addwishlistproduct(id) {
+  const addwishlistproduct = (id) => {
     try {
       dispatch(addWishList(id));
       toast.success(wishlistProducts?.data?.message);
     } catch (error) {
       toast.error(error?.data?.message);
     }
-  }
+  };
 
-  async function addToCartProduct(id) {
+  const addToCartProduct = async (id) => {
     try {
       setLoadingStates((prev) => ({ ...prev, [id]: true }));
       await dispatch(addCart(id));
@@ -64,112 +49,75 @@ export default function ProductsPage() {
     } finally {
       setLoadingStates((prev) => ({ ...prev, [id]: false }));
     }
-  }
+  };
 
-  // تحديث مصطلح البحث
-  function handleSearchChange(e) {
+  const handleSearchChange = (e) => {
     setSearchTerm(e.target.value);
-  }
+  };
 
-  // فلترة المنتجات بناءً على مصطلح البحث والفئة
-  const filteredProducts = allProduct?.filter((product) => {
-    const matchesSearch = product.title.toLowerCase().includes(searchTerm.toLowerCase());
-    return matchesSearch
-  });
+  const filteredProducts = allProduct?.filter((product) =>
+    product.title.toLowerCase().includes(searchTerm.toLowerCase())
+  );
 
   return (
-    <Container>
-      <Typography variant="h4" sx={{ fontWeight: 600, margin: "20px 0" }}>
-        All Products
-      </Typography>
+    <div className="container mx-auto p-5 mt-24">
+      <h1 className="text-3xl font-bold mb-5">All Products</h1>
 
-      {/* حقل البحث */}
-      <TextField
-        variant="outlined"
-        size="small"
+      <input
+        type="text"
         placeholder="Search products..."
         value={searchTerm}
         onChange={handleSearchChange}
-        sx={{ mb: 2 }}
+        className="border border-gray-300 rounded-md p-2 mb-5 w-full"
       />
 
-      {/* خيارات الفلترة */}
-      <FormControl variant="outlined" sx={{ mb: 2, minWidth: 120 }}>
-        <InputLabel>Category</InputLabel>
-      </FormControl>
-
-      <Grid container spacing={3}>
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
         {Array.isArray(filteredProducts) && filteredProducts.length > 0 ? (
           filteredProducts.map((product) => (
-            <Grid item xs={12} sm={6} md={4} key={product.id}>
-              <Box
-                sx={{
-                  border: "1px solid #ddd",
-                  borderRadius: "8px",
-                  padding: "16px",
-                  textAlign: "center",
-                  position: 'relative',
+            <div
+              key={product.id}
+              className="border border-gray-300 rounded-lg p-4 text-center relative"
+            >
+              <Link href={`/DetialsProduct/${product.id}/${product.category.name}`}>
+                <Image
+                  src={product.imageCover}
+                  width={200}
+                  height={200}
+                  className="w-full h-auto rounded-lg"
+                  alt={product.title}
+                />
+                <h2 className="text-lg font-semibold mt-2">{product.title}</h2>
+                <p className="text-red-600 font-medium">${product.price}</p>
+                <p className="text-gray-600 mt-2">{product.description.slice(0, 50)}...</p>
+              </Link>
+              <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  addToCartProduct(product.id);
                 }}
+                className="mt-2 bg-blue-600 text-white py-2 px-4 rounded hover:bg-blue-700"
               >
-                <Link
-                  href={`/DetialsProduct/${product.id}/${product.category.name}`}
-                  style={{ textDecoration: "none", color: "inherit" }}
-                >
-                  <Image
-                    src={product.imageCover}
-                    width={200}
-                    height={200}
-                    sx={{ width: "100%", height: "auto", borderRadius: "8px" }}
-                  />
-                  <Typography variant="h6" sx={{ margin: "10px 0" }}>
-                    {product.title}
-                  </Typography>
-                  <Typography
-                    variant="body1"
-                    sx={{ color: "#DB4444", fontWeight: 500 }}
-                  >
-                    ${product.price}
-                  </Typography>
-                  <Typography
-                    variant="body2"
-                    sx={{ margin: "10px 0", color: "#555" }}
-                  >
-                    {product.description.slice(0, 50)}...
-                  </Typography>
-                </Link>
-                <Button
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    addToCartProduct(product.id);
-                  }}
-                  variant="contained"
-                  color="primary"
-                  sx={{
-                    borderRadius: "4px",
-                    "&:hover": { backgroundColor: "#c62828" },
-                  }}
-                >
-                  {loadingStates[product.id] ? (
-                    <CircularProgress size={24} sx={{ color: "#fff" }} />
-                  ) : (
-                    "Add to Cart"
-                  )}
-                </Button>
-                <Tooltip title="Add to Wishlist" arrow>
-                  <IconButton aria-label="add to wishlist">
-                    <FavoriteIcon onClick={(e) => {
-                      e.stopPropagation();
-                      addwishlistproduct(product.id);
-                    }} />
-                  </IconButton>
-                </Tooltip>
-              </Box>
-            </Grid>
+                {loadingStates[product.id] ? (
+                  <span className="loader"></span>
+                ) : (
+                  "Add to Cart"
+                )}
+              </button>
+              <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  addwishlistproduct(product.id);
+                }}
+                className="absolute top-2 right-2 text-gray-500 hover:text-gray-700"
+              >
+                <i className="fas fa-heart"></i>
+              </button>
+            </div>
           ))
         ) : (
-          <Typography variant="body1">No products available.</Typography>
+          <p>No products available.</p>
         )}
-      </Grid>
-    </Container>
+      </div>
+    </div>
   );
 }

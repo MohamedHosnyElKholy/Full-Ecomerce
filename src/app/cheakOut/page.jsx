@@ -1,210 +1,133 @@
 "use client";
 import React, { useState } from "react";
 import img1 from "../../assets/dl.beatsnoop 1.svg";
-import {
-  Avatar,
-  Box,
-  Grid,
-  Input,
-  InputLabel,
-  Typography,
-  Button,
-} from "@mui/material";
-import FormControl from "@mui/material/FormControl";
-import Link from "next/link";
 import { useFormik } from "formik";
-import axios from "axios";
 import * as Yup from "yup";
-import toast from "react-hot-toast";
-import CircularProgress from '@mui/material/CircularProgress';
 import { useRouter } from "next/navigation";
 import { useDispatch, useSelector } from "react-redux";
-import { getWishLits, deleteWishList } from "../lib/sliceWishlist";
-import { cheakOut} from "../lib/sliceCart";
+import { cheakOut } from "../lib/sliceCart";
+
 export default function Signup() {
   const [loading, setLoading] = useState(false);
   const route = useRouter();
+  
   const validationSchema = Yup.object().shape({
     phone: Yup.string()
       .required("Phone number is required")
       .matches(/^[0-9]+$/, "Phone number must be digits only"),
-    details: Yup.string()
-      .required("Details are required"),
-    city: Yup.string()
-      .required("City is required"),
+    details: Yup.string().required("Details are required"),
+    city: Yup.string().required("City is required"),
   });
 
-  
-  const { products:cheakCart } = useSelector((state) => state.cart); // تأكد من اسم الـ slice
+  const { products: cheakCart } = useSelector((state) => state.cart);
+  const dispatch = useDispatch();
+  const sessions = cheakCart?.data?.session?.url;
 
-
-const didpatch = useDispatch();
-
-const sessions = cheakCart?.data?.session?.url;
-async function handleReg({ cartId, values }) {
-  try{
-    setLoading(true)
-    await didpatch(cheakOut({ cartId, formdData: values })); // استخدم await في حالة أن العملية تأخذ وقت
-    if(sessions){
-      route.push(sessions);
-    }else{
-      console.log('err')
+  async function handleReg({ cartId, values }) {
+    try {
+      setLoading(true);
+      await dispatch(cheakOut({ cartId, formdData: values }));
+      if (sessions) {
+        route.push(sessions);
+      } else {
+        console.log('err');
+      }
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setLoading(false);
     }
   }
-  catch{
-  }
-  finally{
-    setLoading(false)
-  }
-}
 
-const formik = useFormik({
-  initialValues: {
-    phone: "",
-    details: "",
-    city: "",
-  },
-  onSubmit: (values) => handleReg({ cartId: '6703fddb475ce789cdbcba42', values }),
-  validationSchema,
-});
-
-
-
-
-
-
-
-
+  const formik = useFormik({
+    initialValues: {
+      phone: "",
+      details: "",
+      city: "",
+    },
+    onSubmit: (values) => handleReg({ cartId: '6703fddb475ce789cdbcba42', values }),
+    validationSchema,
+  });
 
   return (
-    <Box sx={{ padding: "20px" }}>
-      <Grid
-        container
-        spacing={2}
-        sx={{
-          justifyContent: "center",
-          marginBottom: "20px",
-        }}
-      >
-        <Grid item xs={12} sm={12} md={7}>
-          <Avatar
-            src={img1?.src}
-            sx={{ width: "100%", height: "100%", borderRadius: 0 }}
-          />
-        </Grid>
-        <Grid item xs={12} sm={6} md={5} padding={"70px"}>
-          <Typography
-            variant="h1"
-            fontWeight={500}
-            fontSize={"36px"}
-            marginBottom={"20px"}
-            color={"#000"}
-          >
-             Complete Your Purchase
-          </Typography>
-          <Typography
-            variant="body1"
-            fontWeight={400}
-            fontSize={"16px"}
-            marginBottom={"30px"}
-            color={"#555"}
-          >
+    <div className="p-5 mt-24">
+      <div className="flex flex-col md:flex-row justify-center mb-5">
+        <div className="w-full md:w-7/12">
+          <img src={img1?.src} alt="Logo" className="w-full h-auto rounded-none" />
+        </div>
+        <div className="w-full md:w-5/12 p-10">
+          <h1 className="font-medium text-3xl mb-5 text-black">
+            Complete Your Purchase
+          </h1>
+          <p className="font-normal text-lg mb-8 text-gray-700">
             Enter your details below
-          </Typography>
-          <Box component="form" onSubmit={formik.handleSubmit}>
-            <FormControl sx={{ width: "100%", marginBottom: "20px" }}>
-              <InputLabel htmlFor="phone-input">Phone Number</InputLabel>
-              <Input
+          </p>
+          <form onSubmit={formik.handleSubmit}>
+            <div className="mb-5">
+              <label htmlFor="phone-input" className="block mb-2">Phone Number</label>
+              <input
                 id="phone-input"
                 name="phone"
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
                 value={formik.values.phone}
-                sx={{
-                  backgroundColor: "#f9f9f9",
-                  borderRadius: "4px",
-                }}
+                className="bg-gray-100 rounded w-full p-2"
               />
               {formik.errors.phone && formik.touched.phone && (
-                <Typography
-                  variant="body2"
-                  color="error"
-                  sx={{ marginTop: "8px", fontWeight: 400 }}
-                >
+                <p className="text-red-500 mt-2 font-normal">
                   {formik.errors.phone}
-                </Typography>
+                </p>
               )}
-            </FormControl>
+            </div>
 
-            <FormControl sx={{ width: "100%", marginBottom: "20px" }}>
-              <InputLabel htmlFor="details-input">Details</InputLabel>
-              <Input
+            <div className="mb-5">
+              <label htmlFor="details-input" className="block mb-2">Details</label>
+              <input
                 id="details-input"
                 name="details"
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
                 value={formik.values.details}
-                sx={{
-                  backgroundColor: "#f9f9f9",
-                  borderRadius: "4px",
-                }}
+                className="bg-gray-100 rounded w-full p-2"
               />
               {formik.errors.details && formik.touched.details && (
-                <Typography
-                  variant="body2"
-                  color="error"
-                  sx={{ marginTop: "8px", fontWeight: 400 }}
-                >
+                <p className="text-red-500 mt-2 font-normal">
                   {formik.errors.details}
-                </Typography>
+                </p>
               )}
-            </FormControl>
+            </div>
 
-            <FormControl sx={{ width: "100%", marginBottom: "20px" }}>
-              <InputLabel htmlFor="city-input">City</InputLabel>
-              <Input
+            <div className="mb-5">
+              <label htmlFor="city-input" className="block mb-2">City</label>
+              <input
                 id="city-input"
                 name="city"
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
                 value={formik.values.city}
-                sx={{
-                  backgroundColor: "#f9f9f9",
-                  borderRadius: "4px",
-                }}
+                className="bg-gray-100 rounded w-full p-2"
               />
               {formik.errors.city && formik.touched.city && (
-                <Typography
-                  variant="body2"
-                  color="error"
-                  sx={{ marginTop: "8px", fontWeight: 400 }}
-                >
+                <p className="text-red-500 mt-2 font-normal">
                   {formik.errors.city}
-                </Typography>
+                </p>
               )}
-            </FormControl>
+            </div>
 
-           <Button
-  type="submit"
-  variant="contained"
-  sx={{
-    backgroundColor: "#DB4444",
-    fontWeight: 500,
-    marginBottom: "20px",
-    color: "#fff",
-    borderRadius: "4px",
-    width: "100%",
-    padding: "12px",
-    "&:hover": {
-      backgroundColor: "#c03939",
-    },
-  }}
->
-  {loading ? <CircularProgress /> : "Proceed to Checkout"}
-</Button>
-          </Box>
-        </Grid>
-      </Grid>
-    </Box>
+            <button
+              type="submit"
+              className="bg-red-600 font-medium mb-5 text-white rounded w-full py-3 hover:bg-red-500 flex items-center justify-center"
+            >
+              {loading ? (
+                <i className="fas fa-spinner fa-spin"></i>
+              ) : (
+                <i className="fas fa-check"></i>
+              )}
+              <span className="ml-2">Proceed to Checkout</span>
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
   );
 }

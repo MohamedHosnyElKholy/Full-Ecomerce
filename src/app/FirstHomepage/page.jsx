@@ -1,46 +1,38 @@
 import React from 'react';
-import { Container, Box, Typography, Grid, Paper } from '@mui/material';
-import { AccessAlarm, ShoppingCart, Star } from '@mui/icons-material'; // أيقونات من Material Icons
 
 export default function Page() {
     return (
-        <Container maxWidth="lg" sx={{ my: 4 }}>
+        <div className="container mx-auto my-20">
             {/* Site Introduction */}
-            <Paper elevation={3} sx={{ padding: { xs: 2, sm: 4 }, textAlign: 'center', borderRadius: 2, backgroundColor: '#f5f5f5' }}>
-                <Typography variant="h4" sx={{ fontWeight: 'bold', mb: 2 }}>Welcome to Our Online Store!</Typography>
-                <Typography variant="body1" sx={{ mb: 2 }}>
+            <div className="bg-gray-100 p-8 rounded-lg shadow-md text-center">
+                <h2 className="text-3xl font-bold mb-4">Welcome to Our Online Store!</h2>
+                <p className="mb-4">
                     Discover a unique shopping experience that combines quality and convenience.
-                </Typography>
+                </p>
                 
                 {/* Attractive Icons */}
-                <Grid container spacing={4} sx={{ mt: 2, justifyContent: 'center' }}>
-                    <Grid item xs={12} sm={4}>
-                        <Box sx={{ textAlign: 'center', padding: 2 }}>
-                            <AccessAlarm sx={{ fontSize: 50, color: '#3f51b5' }} />
-                            <Typography variant="h6">Fast Delivery</Typography>
-                            <Typography variant="body2">Get your orders delivered quickly and efficiently.</Typography>
-                        </Box>
-                    </Grid>
-                    <Grid item xs={12} sm={4}>
-                        <Box sx={{ textAlign: 'center', padding: 2 }}>
-                            <ShoppingCart sx={{ fontSize: 50, color: '#3f51b5' }} />
-                            <Typography variant="h6">Easy Shopping</Typography>
-                            <Typography variant="body2">Shop your favorite items with just a few clicks.</Typography>
-                        </Box>
-                    </Grid>
-                    <Grid item xs={12} sm={4}>
-                        <Box sx={{ textAlign: 'center', padding: 2 }}>
-                            <Star sx={{ fontSize: 50, color: '#3f51b5' }} />
-                            <Typography variant="h6">Top Quality</Typography>
-                            <Typography variant="body2">We offer only the best products for our customers.</Typography>
-                        </Box>
-                    </Grid>
-                </Grid>
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-8 mt-6">
+                    <div className="flex flex-col items-center p-4">
+                        <i className="fas fa-clock text-5xl text-blue-600 mb-2"></i>
+                        <h3 className="text-xl font-semibold">Fast Delivery</h3>
+                        <p className="text-gray-600">Get your orders delivered quickly and efficiently.</p>
+                    </div>
+                    <div className="flex flex-col items-center p-4">
+                        <i className="fas fa-shopping-cart text-5xl text-blue-600 mb-2"></i>
+                        <h3 className="text-xl font-semibold">Easy Shopping</h3>
+                        <p className="text-gray-600">Shop your favorite items with just a few clicks.</p>
+                    </div>
+                    <div className="flex flex-col items-center p-4">
+                        <i className="fas fa-star text-5xl text-blue-600 mb-2"></i>
+                        <h3 className="text-xl font-semibold">Top Quality</h3>
+                        <p className="text-gray-600">We offer only the best products for our customers.</p>
+                    </div>
+                </div>
                 
-                <Typography variant="body1" sx={{ mt: 2 }}>
+                <p className="mt-4">
                     Join us today and discover exclusive deals!
-                </Typography>
-            </Paper>
-        </Container>
+                </p>
+            </div>
+        </div>
     );
 }

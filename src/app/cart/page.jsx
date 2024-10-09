@@ -3,21 +3,8 @@ import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { updateCart, removeProductFlashSeals, clearCart, getuserCart } from "../lib/sliceCart";
 import Image from 'next/image';
-
-import {
-  Container,
-  Box,
-  Typography,
-  Card,
-  CardContent,
-  Button,
-  IconButton,
-  CircularProgress,
-} from "@mui/material";
-import Link from 'next/link';
-import AddIcon from "@mui/icons-material/Add";
-import RemoveIcon from "@mui/icons-material/Remove";
 import { toast } from "react-hot-toast";
+import Link from 'next/link';
 
 export default function Page() {
   const [loadingStates, setLoadingStates] = useState({});
@@ -25,7 +12,7 @@ export default function Page() {
   const dispatch = useDispatch();
   const { products: cartProducts } = useSelector((state) => state.cart);
   const allCart = cartProducts?.data?.data?.products || [];
-  
+
   useEffect(() => {
     dispatch(getuserCart());
   }, [dispatch]);
@@ -61,119 +48,86 @@ export default function Page() {
   };
 
   return (
-    <Container sx={{ mt: { xs: 2, sm: 4 } }}>
-      <Typography variant="h4" sx={{ mb: { xs: 2, sm: 3 } }}>
-        Your Cart
-      </Typography>
+    <div className="container mx-auto mt-24">
+      <h1 className="text-3xl font-bold mb-4">Your Cart</h1>
 
       {allCart.length === 0 ? (
-        <Box sx={{ textAlign: "center", mt: 4 }}>
-          <Typography variant="h6" color="text.secondary">
-            Your cart is empty. Please add some products!
-          </Typography>
-        </Box>
+        <div className="text-center mt-4">
+          <h2 className="text-xl text-gray-600">Your cart is empty. Please add some products!</h2>
+        </div>
       ) : (
         <>
           {/* Total Price Section */}
-          <Box sx={{ mt: 4, textAlign: { xs: "center", sm: "right" } }}>
-            <Typography variant="h5" sx={{ mb: 1, fontWeight: "bold", color: "#333", fontSize: { xs: "20px", sm: "24px" } }}>
-              Total Price:
-            </Typography>
-            <Typography variant="h5" sx={{ color: "#DB4444", fontSize: { xs: "22px", sm: "28px" } }}>
-              ${cartProducts?.data?.data?.totalCartPrice}
-            </Typography>
-          </Box>
+          <div className="mt-4 text-right">
+            <h2 className="text-2xl font-bold text-gray-800">Total Price:</h2>
+            <h2 className="text-2xl text-red-600">${cartProducts?.data?.data?.totalCartPrice}</h2>
+          </div>
 
           {/* Clear Cart Button */}
-          <Box sx={{ textAlign: { xs: "center", sm: "right" }, mb: 2, mt: { xs: 1, sm: 0 } }}>
-            <Button variant="outlined" color="error" onClick={handleClearCart} sx={{ px: { xs: 2, sm: 3 }, py: { xs: 1, sm: 1.5 } }}>
+          <div className="text-right mb-2 mt-1">
+            <button onClick={handleClearCart} className="px-4 py-2 border border-red-500 text-red-500 rounded hover:bg-red-500 hover:text-white transition">
               Clear Cart
-            </Button>
-          </Box>
+            </button>
+          </div>
 
           {/* Cart Items */}
-          <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
+          <div className="flex flex-col gap-4">
             {allCart.map((product) => (
-              <Card key={product.product?.id} sx={{ display: "flex", flexDirection: { xs: "column", sm: "row" }, alignItems: { xs: "center", sm: "flex-start" }, p: 2 }}>
-                <Box sx={{ width: 80, height: 80, position: 'relative' }}>
+              <div key={product.product?.id} className="flex flex-col sm:flex-row items-center p-4 border border-gray-300 rounded-md">
+                <div className="relative w-20 h-20">
                   <Image
                     src={product.product?.imageCover}
                     alt={product.product?.title}
                     layout="fill"
                     objectFit="cover"
-                    style={{ borderRadius: '8px' }}
+                    className="rounded-md"
                   />
-                </Box>
-                <CardContent sx={{ flex: "1 0 auto", textAlign: { xs: "center", sm: "left" } }}>
-                  <Typography variant="h6" sx={{ fontWeight: 600 }}>
-                    {product.product?.title}
-                  </Typography>
-                  <Typography variant="body2" color="text.secondary" sx={{ mb: 1 }}>
-                    Price: ${product?.price}
-                  </Typography>
-                  <Box sx={{ display: "flex", alignItems: "center", justifyContent: { xs: "center", sm: "flex-start" }, gap: 1 }}>
-                    <IconButton
+                </div>
+                <div className="flex-1 text-center sm:text-left p-2">
+                  <h2 className="text-lg font-semibold">{product.product?.title}</h2>
+                  <p className="text-gray-600 mb-1">Price: ${product?.price}</p>
+                  <div className="flex items-center justify-center sm:justify-start gap-2">
+                    <button
                       onClick={() => handleUpdateCart(product.product?.id, product.count - 1)}
                       disabled={loadingStates[product.product?.id] || product.count <= 1}
-                      sx={{ p: { xs: 0.5, sm: 1 } }}
+                      className="px-2 py-1 border rounded hover:bg-gray-200"
                     >
-                      <RemoveIcon />
-                    </IconButton>
-                    <Typography sx={{ mx: 1, fontSize: { xs: "16px", sm: "18px" } }}>
-                      {loadingStates[product.product?.id] ? (
-                        <CircularProgress size={24} sx={{ color: "#ccc" }} />
-                      ) : (
-                        product.count
-                      )}
-                    </Typography>
-                    <IconButton
+                      -
+                    </button>
+                    <span className="mx-1 text-xl">
+                      {loadingStates[product.product?.id] ? "..." : product.count}
+                    </span>
+                    <button
                       onClick={() => handleUpdateCart(product.product?.id, product.count + 1)}
                       disabled={loadingStates[product.product?.id]}
-                      sx={{ p: { xs: 0.5, sm: 1 } }}
+                      className="px-2 py-1 border rounded hover:bg-gray-200"
                     >
-                      <AddIcon />
-                    </IconButton>
-                  </Box>
-                </CardContent>
-                <Box sx={{ display: "flex", flexDirection: { xs: "row", sm: "column" }, justifyContent: { xs: "center", sm: "center" }, alignItems: { xs: "center", sm: "flex-end" }, ml: { sm: 2 }, mt: { xs: 2, sm: 0 } }}>
-                  <Button
-                    variant="contained"
-                    color="secondary"
+                      +
+                    </button>
+                  </div>
+                </div>
+                <div className="flex flex-col items-center sm:items-end ml-0 sm:ml-2 mt-2 sm:mt-0">
+                  <button
                     onClick={() => handleRemoveCart(product.product?.id)}
-                    sx={{ minWidth: { xs: "100px", sm: "auto" }, px: { xs: 2, sm: 3 }, py: { xs: 1, sm: 1.5 } }}
+                    className="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600 transition"
                   >
-                    {loadingRemoveStates[product.product?.id] ? (
-                      <CircularProgress size={24} sx={{ color: "#fff" }} />
-                    ) : (
-                      "Remove"
-                    )}
-                  </Button>
-                </Box>
-              </Card>
+                    {loadingRemoveStates[product.product?.id] ? "..." : "Remove"}
+                  </button>
+                </div>
+              </div>
             ))}
-          </Box>
+          </div>
 
           {/* Check Out Button */}
-          <Box sx={{ textAlign: { xs: "center", sm: "right" }, mt: 4, mb: 4 }}>
-            <Link href="/cheakOut" style={{ textDecoration: "none" }}>
-              <Button
-                variant="contained"
-                color="primary"
-                sx={{
-                  backgroundColor: "#DB4444",
-                  color: "#fff",
-                  px: { xs: 3, sm: 4 },
-                  py: { xs: 1.5, sm: 2 },
-                  borderRadius: "4px",
-                  "&:hover": { backgroundColor: "#c03939" },
-                }}
-              >
+          <div className="text-right mt-4 mb-4">
+            <Link href="/cheakOut">
+              <button className="px-6 py-2 bg-red-500 text-white rounded hover:bg-red-600 transition">
                 Check Out
-              </Button>
+              </button>
             </Link>
-          </Box>
+          </div>
         </>
       )}
-    </Container>
+    </div>
   );
 }

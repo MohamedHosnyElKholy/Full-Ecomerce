@@ -1,8 +1,6 @@
 'use client';
 
 import React, { useEffect } from "react";
-import { Container, Box, Typography, Button, Grid, Avatar } from '@mui/material';
-import DeleteIcon from '@mui/icons-material/Delete';
 import { useDispatch, useSelector } from "react-redux";
 import { getWishLits, deleteWishList } from "../lib/sliceWishlist";
 import toast from 'react-hot-toast';
@@ -10,7 +8,6 @@ import Image from 'next/image';
 
 export default function Wishlist() {
   const { products: getwishlistProducts } = useSelector((state) => state.wishlist);
-
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -19,74 +16,45 @@ export default function Wishlist() {
 
   async function deleteProductWish(id) {
     try {
-      await dispatch(deleteWishList(id)).unwrap(); // استخدام unwrap للحصول على نتيجة مباشرة
+      await dispatch(deleteWishList(id)).unwrap();
       toast.success("Product removed from wishlist");
-      await dispatch(getWishLits()).unwrap(); // تحديث قائمة المفضلة بعد الحذف
+      await dispatch(getWishLits()).unwrap();
     } catch (error) {
       toast.error("Failed to remove product: " + error.message);
     }
   }
 
-  console.log(getwishlistProducts); // تحقق من هيكل البيانات
-
   return (
-    <Container sx={{ margin: '30px auto' }}>
-      <Typography variant="h4" gutterBottom>
-        Your Wishlist
-      </Typography>
+    <div className="container mx-auto my-8 p-5 mt-24">
+      <h2 className="text-3xl font-bold mb-4">Your Wishlist</h2>
       {getwishlistProducts?.data?.data?.length === 0 ? (
-        <Typography variant="h6" color="textSecondary" align="center" sx={{ marginTop: 2 }}>
+        <p className="text-lg text-gray-600 text-center mt-4">
           Your wishlist is currently empty. Add items to your wishlist to save them for later!
-        </Typography>
+        </p>
       ) : (
-        <Grid container spacing={3}>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           {Array.isArray(getwishlistProducts?.data?.data) && getwishlistProducts.data.data.map((item) => (
-            <Grid item xs={12} sm={6} md={4} key={item._id}>
-              <Box
-                border={1}
-                borderRadius={4}
-                padding={2}
-                display="flex"
-                flexDirection="column"
-                alignItems="center"
-                justifyContent="space-between"
-                height="100%"
+            <div key={item._id} className="border border-gray-300 rounded-lg p-4 flex flex-col items-center">
+              <Image
+                src={item.imageCover}
+                alt={item.name}
+                width={200}
+                height={200}
+                className="rounded-t-lg object-cover"
+              />
+              <h3 className="text-lg font-semibold text-center mt-2">{item.title}</h3>
+              <p className="text-gray-700">Price: ${item.price}</p>
+              <p className="text-gray-600">Rating: {item.ratingsAverage} ({item.ratingsQuantity} reviews)</p>
+              <button 
+                onClick={() => deleteProductWish(item._id)} 
+                className="mt-4 px-4 py-2 border border-red-500 text-red-500 rounded hover:bg-red-500 hover:text-white transition"
               >
-                <Image
-                src={item.imageCover} // رابط الصورة
-                alt={item.name} // وصف الصورة
-                width={200} // استبدل بالقيمة المناسبة
-                height={200} // استبدل بالقيمة المناسبة
-                style={{
-                    borderTopLeftRadius: '8px',
-                    borderTopRightRadius: '8px',
-                    objectFit: 'cover', // للحفاظ على تناسق الصورة
-                }}
-            />
-                <Typography variant="h6" sx={{ textAlign: "center" }} gutterBottom>
-                  {item.title}
-                </Typography>
-                <Typography variant="body1" color="textSecondary">
-                  Price: ${item.price}
-                </Typography>
-                <Typography variant="body2" color="textSecondary">
-                  Rating: {item.ratingsAverage} ({item.ratingsQuantity} reviews)
-                </Typography>
-                <Button 
-                  onClick={() => deleteProductWish(item._id)} 
-                  variant="outlined" 
-                  color="secondary" 
-                  sx={{ margin: '15px 0' }} 
-                  startIcon={<DeleteIcon />} 
-                  fullWidth
-                >
-                  Remove
-                </Button>
-              </Box>
-            </Grid>
+                Remove
+              </button>
+            </div>
           ))}
-        </Grid>
+        </div>
       )}
-    </Container>
+    </div>
   );
 }

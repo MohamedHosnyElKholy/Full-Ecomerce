@@ -1,18 +1,8 @@
 "use client";
 import React, { useState } from "react";
-import {
-  Box,
-  Grid,
-  Input,
-  InputLabel,
-  Typography,
-  Button,
-} from "@mui/material";
-import FormControl from "@mui/material/FormControl";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import toast from "react-hot-toast";
-import CircularProgress from '@mui/material/CircularProgress';
 import { useRouter } from "next/navigation";
 import axios from "axios";
 
@@ -29,17 +19,15 @@ export default function ResetCode() {
   async function handleSubmit(values) {
     try {
       setLoading(true);
-      // هنا يمكنك إرسال كود إعادة التعيين إلى الخادم للتحقق
       const response = await axios.post(
         `https://ecommerce.routemisr.com/api/v1/auth/verifyResetCode`,
         values
       );
-      toast.success('Sucsess');
-      // إذا تم التحقق بنجاح، يمكنك توجيه المستخدم إلى صفحة إعادة تعيين كلمة المرور
-      route.push('/newpassword');
+      toast.success("Success");
+      route.push('/newpassword'); // Redirect to new password page
     } catch (error) {
-      toast.error(error.response.data.message);
-    }finally{
+      toast.error(error.response?.data?.message || "An error occurred");
+    } finally {
       setLoading(false);
     }
   }
@@ -53,80 +41,39 @@ export default function ResetCode() {
   });
 
   return (
-    <Box sx={{ padding: "20px" }}>
-      <Grid
-        container
-        spacing={2}
-        sx={{
-          justifyContent: "center",
-          marginBottom: "20px",
-        }}
-      >
-        <Grid item xs={12} sm={6} md={5} padding={"70px"}>
-          <Typography
-            variant="h1"
-            fontWeight={500}
-            fontSize={"36px"}
-            marginBottom={"20px"}
-            color={"#000"}
-          >
-            Verify Reset Code
-          </Typography>
-          <Typography
-            variant="body1"
-            fontWeight={400}
-            fontSize={"16px"}
-            marginBottom={"30px"}
-            color={"#555"}
-          >
+    <div className="p-5">
+      <div className="flex justify-center mb-5">
+        <div className="bg-white p-10 rounded shadow-lg w-full max-w-md">
+          <h1 className="text-2xl font-bold mb-5">Verify Reset Code</h1>
+          <p className="text-gray-600 mb-6">
             Enter the reset code sent to your email
-          </Typography>
-          <Box component="form" onSubmit={formik.handleSubmit}>
-            <FormControl sx={{ width: "100%", marginBottom: "20px" }}>
-              <InputLabel htmlFor="reset-code-input">Reset Code</InputLabel>
-              <Input
-                id="reset-code-input"
+          </p>
+          <form onSubmit={formik.handleSubmit}>
+            <div className="mb-4">
+              <label htmlFor="resetCode" className="block mb-2">Reset Code</label>
+              <input
+                id="resetCode"
                 name="resetCode"
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
                 value={formik.values.resetCode}
-                sx={{
-                  backgroundColor: "#f9f9f9",
-                  borderRadius: "4px",
-                }}
+                className="border rounded p-2 w-full bg-gray-100"
               />
               {formik.errors.resetCode && formik.touched.resetCode && (
-                <Typography
-                  variant="body2"
-                  color="error"
-                  sx={{ marginTop: "8px", fontWeight: 400 }}
-                >
-                  {formik.errors.resetCode}
-                </Typography>
+                <p className="text-red-500 text-sm mt-1">{formik.errors.resetCode}</p>
               )}
-            </FormControl>
+            </div>
 
-            <Button
+            <button
               type="submit"
-              variant="contained"
-              sx={{
-                backgroundColor: "#DB4444",
-                fontWeight: 500,
-                marginBottom: "20px",
-                color: "#fff",
-                borderRadius: "4px",
-                width: "100%",
-                padding: "12px",
-                "&:hover": {
-                  backgroundColor: "#c03939",
-                },
-              }}
+              className={`bg-red-500 text-white font-semibold py-2 px-4 rounded w-full ${loading ? "opacity-50" : ""}`}
+              disabled={loading}
             >
-              {loading ? <CircularProgress/> : "Verity"}
-            </Button>
-          </Box>
-        </Grid>
-      </Grid>
-    </Box>
+              {loading ? <i className="fas fa-spinner fa-spin"></i> : "Verify"}
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
   );
 }

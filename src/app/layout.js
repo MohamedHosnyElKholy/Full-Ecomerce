@@ -5,6 +5,7 @@ import Footer from "./Footer/page";
 import { Toaster } from "react-hot-toast";
 import { pacifico } from './fonts/font'; 
 import ReduexProvider from './lib/ReduexProvider'
+import '../../node_modules/@fortawesome/fontawesome-free/css/all.min.css'
 // Adding Metadata here
 export const metadata = {
   title: "E-Commerce Application",
@@ -17,7 +18,6 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body
-        className={pacifico.className} 
         style={{
           display: "flex",
           flexDirection: "column",
