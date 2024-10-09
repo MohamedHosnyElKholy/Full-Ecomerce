@@ -1,5 +1,9 @@
 import React from "react";
 import Image from "next/image";
+import img1 from '../../assets/download-appstore.svg'
+import img2 from '../../assets/Qrcode 1.svg'
+import img3 from '../../assets/png-transparent-google-play-store-logo-google-play-app-store-android-wallets-text-label-logo.svg'
+
 
 export default function Footer() {
   return (
@@ -52,10 +56,10 @@ export default function Footer() {
             <h2 className="font-medium text-xl mb-4">Download App</h2>
             <p className="font-medium text-sm mb-4">Save $3 with App New User Only</p>
             <div className="flex mt-4 gap-2">
-              <Image src="/path/to/qrcode.svg" alt="QR Code" width={100} height={100} className="w-full" />
+              <Image src={img1} alt="QR Code" width={100} height={100} className="w-full" />
               <div>
-                <Image src="/path/to/download-appstore.svg" alt="App Store" width={100} height={40} className="w-full mb-2" />
-                <Image src="/path/to/google-play.svg" alt="Google Play" width={100} height={40} className="w-full" />
+                <Image src={img2} alt="App Store" width={100} height={40} className="w-full mb-2" />
+                <Image src={img3} alt="Google Play" width={100} height={40} className="w-full" />
               </div>
             </div>
           </div>

@@ -66,7 +66,7 @@ export default function Page() {
 
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
         {Array.isArray(allProduct) && allProduct.slice(0, 4).map((el) => (
-          <div key={el.id} className="relative text-center shadow-lg rounded-lg p-5 bg-white transition-transform transform hover:scale-105">
+          <div key={el.id} className="relative text-center shadow-lg rounded-lg p-5 bg-white transition-transform transform hover:scale-105 m-auto">
             <Link href={`/DetialsProduct/${el.id}/${el.category.name}`}>
               <Image
                 src={el.imageCover}
